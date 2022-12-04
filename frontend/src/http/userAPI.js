@@ -18,3 +18,19 @@ export const check = async () => {
     localStorage.setItem('token', data.token)
     return jwtDecode(data.token)
 }
+
+export const editUser = async (user) => {
+    const {data} = await $authHost.put('api/user', user)
+    localStorage.setItem('token', data.token)
+    return jwtDecode(data.token)
+}
+
+export const changePassword = async (user) => {
+    const {data} = await $authHost.put('api/user/password', user)
+    return data
+}
+
+export const deleteAccount = async (id) => {
+    const {data} = await $authHost.delete('api/user', { data: { id } })
+    return data
+}

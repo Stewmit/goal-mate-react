@@ -61,6 +61,67 @@ class UserController {
         const token = generateJWT(req.user.id, req.user.name, req.user.surname, req.user.email)
         return res.json({token})
     }
+
+    async updateUser(req, res, next) {
+        const {id, name, surname, email} = req.body
+
+        await User.update(
+            {
+                name,
+                surname,
+                email
+            },
+            {
+                where: {
+                    id
+                },
+            }
+        )
+
+        const user = await User.findOne({where: {id}})
+
+        const token = generateJWT(user.id, user.name, user.surname, user.email)
+        return res.json({token})
+    }
+
+    async changePassword(req, res, next) {
+        const {id, oldPassword, newPassword} = req.body
+
+        const user = await User.findOne({where: {id}})
+
+        let comparePassword = bcrypt.compareSync(oldPassword, user.password)
+        if (!comparePassword) {
+            return next(ApiError.internal('Wrong password!'))
+        }
+
+        const hashPassword = await bcrypt.hash(newPassword, 5)
+
+        await User.update(
+            {
+                password: hashPassword
+            },
+            {
+                where: {
+                    id
+                },
+            }
+        )
+
+        return res.json({message: 'Password was changed!'})
+    }
+
+    async deleteUser(req, res) {
+
+        const {id} = req.body
+
+        await User.destroy({
+            where: {
+                id
+            },
+        })
+
+        return res.json({message: 'User was deleted!'})
+    }
 }
 
 module.exports = new UserController()

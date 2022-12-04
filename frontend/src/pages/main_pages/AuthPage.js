@@ -8,15 +8,15 @@ import {useDispatch} from "react-redux";
 const AuthPage = () => {
 
     const location = useLocation()
-    const isLoginPage = location.pathname === LOGIN_ROUTE
     const navigate = useNavigate()
-
     const dispatch = useDispatch()
 
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+
+    const isLoginPage = location.pathname === LOGIN_ROUTE
 
     const signIn = async () => {
         try {
