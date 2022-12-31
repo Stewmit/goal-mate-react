@@ -34,7 +34,7 @@ const ProfilePage = () => {
                     marginTop: '70px'
                 }}
             >
-                <Paper elevation={2} style={{paddingTop: '10px'}}>
+                <Paper elevation={4} style={{paddingTop: '10px'}}>
                     <div
                         style={{
                             display: 'flex',
@@ -46,9 +46,6 @@ const ProfilePage = () => {
                             Профиль
                         </Typography>
                     </div>
-                    <Stack direction={'row'} spacing={'3'}>
-
-                    </Stack>
                     <Grid container spacing={2}>
                         <Grid item xs={3}>
                             <img
@@ -84,13 +81,13 @@ const ProfilePage = () => {
                                 >
                                     <Stack direction={'row'} spacing={2}>
                                         <Typography>
-                                            {`Цели: 5/10`}
+                                            {`Цели: 2/4`}
                                         </Typography>
                                         <Typography>
-                                            {`Задачи: 8/15`}
+                                            {`Задачи: 5/15`}
                                         </Typography>
                                         <Typography>
-                                            {`Привычки: 6`}
+                                            {`Привычки: 3`}
                                         </Typography>
                                     </Stack>
                                 </ListItem>

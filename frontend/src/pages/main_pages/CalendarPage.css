@@ -1,0 +1,91 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+.calendar-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.week {
+    display: flex;
+    justify-content: center;
+}
+
+.board {
+    min-width: 250px;
+    min-height: 400px;
+    margin: 10px;
+    padding: 15px;
+}
+
+.board__header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.board__habit-list {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.board__habit {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.board__task-list {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.board__task {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 100%;
+    padding: 10px;
+    cursor: grab;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.board__task:active {
+    cursor: grabbing;
+}
+
+.board__task-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.board__task-time {
+    font-size: 11px;
+    color: #ff6530;
+}
+
+.board__task-name {
+
+}
+
+.task {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    margin: 5px 0;
+    cursor: grab;
+}
+
+.board__add-task {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

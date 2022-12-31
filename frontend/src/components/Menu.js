@@ -48,7 +48,7 @@ export const Menu = () => {
         <div>
             <React.Fragment>
                 <IconButton onClick={() => setOpen(true)}>
-                    <AccountCircleOutlinedIcon fontSize={'large'} style={{ color: '#333333' }} />
+                    <AccountCircleOutlinedIcon fontSize={'large'} style={{ color: 'black' }} />
                 </IconButton>
                 <Drawer
                     anchor={'left'}
@@ -75,7 +75,7 @@ export const Menu = () => {
                                     <ListItemIcon>
                                         <GroupIcon />
                                     </ListItemIcon>
-                                    <ListItemText primary={'Друзья'} />
+                                    <ListItemText primary={'Друзья'} secondary={'Скоро'} />
                                 </ListItemButton>
                             </ListItem>
                         </List>
@@ -86,7 +86,7 @@ export const Menu = () => {
                                     <ListItemIcon>
                                         <TodayIcon />
                                     </ListItemIcon>
-                                    <ListItemText primary={'Мой день'} />
+                                    <ListItemText primary={'Мой день'} secondary={'Скоро'}/>
                                 </ListItemButton>
                             </ListItem>
                             <ListItem disablePadding>

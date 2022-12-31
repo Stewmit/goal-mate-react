@@ -62,7 +62,7 @@ class UserController {
         return res.json({token})
     }
 
-    async updateUser(req, res, next) {
+    async updateUser(req, res) {
         const {id, name, surname, email} = req.body
 
         await User.update(
