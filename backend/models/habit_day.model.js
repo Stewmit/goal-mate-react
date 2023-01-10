@@ -15,4 +15,4 @@ const HabitDay = sequelize.define('habit_day', {
     }
 })
 
-module.exports = { HabitDay }
+module.exports = HabitDay

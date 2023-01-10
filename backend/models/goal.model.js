@@ -24,4 +24,4 @@ const Goal = sequelize.define('goal', {
     }
 })
 
-module.exports = { Goal }
+module.exports = Goal

@@ -15,4 +15,4 @@ const Subtask = sequelize.define('subtask', {
     }
 })
 
-module.exports = { Subtask }
+module.exports = Subtask

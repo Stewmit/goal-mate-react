@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Divider, IconButton, Paper, Typography, Checkbox, TextField} from "@mui/material";
+import {Checkbox, Divider, IconButton, Paper, TextField, Typography} from "@mui/material";
 import './CalendarPage.css'
 import {Menu} from "../../components/Menu";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -8,9 +8,16 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
-import AddIcon from '@mui/icons-material/Add';
+import {createTask} from "../../http/taskAPI";
+import {useDispatch} from "react-redux";
 
 const CalendarPage = () => {
+
+    // useEffect(() => {
+    //     fetchGreenhouses(null).then(data => greenhouse.setGreenhouses(data))
+    // })
+
+    const dispatch = useDispatch()
 
     const [boards, setBoards] = useState([
         {id: 1, date: '6.11', title:'ПН',
@@ -92,27 +99,38 @@ const CalendarPage = () => {
         },
     ])
 
+    const [taskInputs, setTaskInputs] = useState({})
+
     const [currentBoard, setCurrentBoard] = useState(null)
     const [currentItem, setCurrentItem] = useState(null)
 
-    function dragOverHandler(e) {
-        e.preventDefault()
-        // if(e.target.className === 'item') {
-            // e.target.style.boxShadow = '0 4px 3px gray'
-        // }
+    const taskFieldsHandler = e => {
+        setTaskInputs(prevState => ({ ...prevState, [e.target.name]: e.target.value }))
     }
 
-    function dragLeaveHandler(e) {
-        // e.target.style.boxShadow = 'none'
+    const addTaskHandler = e => {
+        const currentValue = taskInputs[e.target.name]
+        if (!currentValue) {
+            return
+        }
+        createTask({name: currentValue})
+            .then(data => {
+                setTaskInputs(prevState => ({ ...prevState, [e.target.name]: '' }))
+                console.log(data)
+                // Add in List (Redux)
+            })
+            .catch(err => {
+                alert(err)
+            })
+    }
+
+    function dragOverHandler(e) {
+        e.preventDefault()
     }
 
     function dragStartHandler(e, board, item) {
         setCurrentBoard(board)
         setCurrentItem(item)
-    }
-
-    function dragEndHandler(e) {
-        // e.target.style.boxShadow = 'none'
     }
 
     function dropHandler(e, board, item) {
@@ -164,7 +182,7 @@ const CalendarPage = () => {
                 </div>
             </div>
             <div className='week'>
-                {boards.map(board =>
+                {boards.map((board, boardIndex) =>
                     <Paper
                         elevation={4}
                         className='board'
@@ -190,14 +208,22 @@ const CalendarPage = () => {
                         </div>
                         <Divider sx={{mt: 2, mb: 2}}/>
                         <div className='board__task-list'>
+                            <div className='board__add-task' style={{marginBottom: 15}}>
+                                <TextField
+                                    name={'field' + boardIndex}
+                                    value={taskInputs['field' + boardIndex] || ''}
+                                    onBlur={addTaskHandler}
+                                    onChange={taskFieldsHandler}
+                                    // 2. onKeyDown={addTask} ||||| if (e.key === 'Enter')
+                                    variant="standard"
+                                />
+                            </div>
                             {board.tasks.map(task =>
                                 <Paper
                                     elevation={2}
                                     className='board__task'
                                     onDragOver={(e) => dragOverHandler(e)}
-                                    onDragLeave={(e) => dragLeaveHandler(e)}
                                     onDragStart={(e) => dragStartHandler(e, board, task)}
-                                    onDragEnd={(e) => dragEndHandler(e)}
                                     onDrop={(e) => dropHandler(e, board, task)}
                                     draggable={true}
                                     sx={{background: task.highlight}}
@@ -213,12 +239,6 @@ const CalendarPage = () => {
                                     />
                                 </Paper>
                             )}
-                            <div className='board__add-task'>
-                                <TextField variant="standard" />
-                                <IconButton>
-                                    <AddIcon/>
-                                </IconButton>
-                            </div>
                         </div>
                     </Paper>
                 )}

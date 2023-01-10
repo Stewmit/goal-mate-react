@@ -31,4 +31,4 @@ const Habit = sequelize.define('habit', {
     }
 })
 
-module.exports = { Habit }
+module.exports = Habit

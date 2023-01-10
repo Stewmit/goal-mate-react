@@ -1,10 +1,8 @@
 import React, {useState} from 'react'
 import './CalendarPage.css'
 import HabitModal from "../../components/modals/HabitModal";
-import {Box, Checkbox, Chip, Container, Fab, IconButton, Paper, Stack, Typography} from "@mui/material";
+import {Checkbox, Chip, Container, Fab, Paper, Typography} from "@mui/material";
 import {Menu} from "../../components/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import './TasksPage.css'
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";

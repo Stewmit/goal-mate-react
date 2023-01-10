@@ -14,16 +14,19 @@ const Task = sequelize.define('task', {
         type: DataTypes.INTEGER
     },
     name: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false
     },
     isComplete: {
-        type: DataTypes.BOOLEAN
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
     },
     time: {
         type: DataTypes.STRING
     },
     date: {
-        type: DataTypes.DATE
+        type: DataTypes.DATEONLY,
+        defaultValue: DataTypes.NOW
     },
     highlightColor: {
         type: DataTypes.STRING
@@ -33,4 +36,4 @@ const Task = sequelize.define('task', {
     }
 })
 
-module.exports = { Task }
+module.exports = Task
