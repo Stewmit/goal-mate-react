@@ -5,7 +5,7 @@ import {useSelector} from "react-redux";
 
 const DefaultPage = () => {
 
-    const isAuth = useSelector(state => state.isAuth)
+    const isAuth = useSelector(state => state.user.isAuth)
     const navigate = useNavigate()
 
     useEffect(() => {

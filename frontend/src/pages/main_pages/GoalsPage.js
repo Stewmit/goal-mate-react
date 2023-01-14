@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import './CalendarPage.css'
-import TaskModal from "../../components/modals/TaskModal";
+import TaskModal from "../../components/modals/Popup";
 import {Box, Checkbox, Chip, Container, Fab, IconButton, Paper, Stack, Typography} from "@mui/material";
 import {Menu} from "../../components/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";

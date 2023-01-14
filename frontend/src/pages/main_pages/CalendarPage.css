@@ -50,14 +50,9 @@
     margin-bottom: 5px;
     width: 100%;
     padding: 10px;
-    cursor: grab;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.board__task:active {
-    cursor: grabbing;
 }
 
 .board__task-content {

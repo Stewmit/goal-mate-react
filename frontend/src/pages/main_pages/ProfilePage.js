@@ -6,11 +6,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import ChangeNameModal from "../../components/modals/profile/ChangeNameModal";
 import ChangeEmailModal from "../../components/modals/profile/ChangeEmailModal";
 import ChangePasswordModal from "../../components/modals/profile/ChangePasswordModal";
-import AccountDeleteAlert from "../../components/alerts/AlertDialog";
+import AccountDeleteDialog from "../../components/alerts/AccountDeleteDialog";
 
 const ProfilePage = () => {
 
-    const user = useSelector(state => state.user)
+    const user = useSelector(state => state.user.user)
 
     const [openChangeName, setOpenChangeName] = useState(false)
     const [openChangeEmail, setOpenChangeEmail] = useState(false)
@@ -140,7 +140,7 @@ const ProfilePage = () => {
             <ChangeNameModal open={openChangeName} closeHandler={closeChangeNameHandler} user={user} />
             <ChangeEmailModal open={openChangeEmail} closeHandler={closeChangeEmailHandler} user={user} />
             <ChangePasswordModal open={openChangePassword} closeHandler={closeChangePasswordHandler} user={user} />
-            <AccountDeleteAlert open={openDeleteAccount} closeHandler={closeDeleteAccountHandler} user={user}/>
+            <AccountDeleteDialog open={openDeleteAccount} closeHandler={closeDeleteAccountHandler} user={user}/>
         </Box>
     )
 }

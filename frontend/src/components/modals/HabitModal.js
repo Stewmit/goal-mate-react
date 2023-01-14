@@ -11,7 +11,7 @@ import {
     Typography
 } from "@mui/material";
 import {useDispatch} from "react-redux";
-import './TaskModal.css'
+import './Popup.css'
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from '@mui/icons-material/Delete';
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";

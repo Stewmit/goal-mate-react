@@ -1,170 +1,74 @@
-import React, {useState} from 'react'
-import {Checkbox, Divider, IconButton, Paper, TextField, Typography} from "@mui/material";
+import React, {useEffect, useState} from 'react'
+import {Box, Checkbox, Divider, IconButton, Paper, Stack, TextField, Typography} from "@mui/material";
 import './CalendarPage.css'
 import {Menu} from "../../components/Menu";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import CloseIcon from '@mui/icons-material/Close';
-import CheckIcon from '@mui/icons-material/Check';
-import {createTask} from "../../http/taskAPI";
-import {useDispatch} from "react-redux";
+import {createTask, fetchTasks} from "../../http/taskAPI";
+import {useDispatch, useSelector} from "react-redux";
+import {ADD_TASK_ACTION, LOAD_TASKS_ACTION, UPDATE_TASK_ACTION} from "../../utils/consts";
+import {addDays, format, startOfWeek} from 'date-fns'
+import Popup from "../../components/modals/Popup";
+import TaskForm from "../../components/forms/TaskForm";
 
 const CalendarPage = () => {
 
-    // useEffect(() => {
-    //     fetchGreenhouses(null).then(data => greenhouse.setGreenhouses(data))
-    // })
-
     const dispatch = useDispatch()
 
-    const [boards, setBoards] = useState([
-        {id: 1, date: '6.11', title:'ПН',
-            habits: [
-                {id: 1, title: 'Чтение'},
-                {id: 2, title: 'Английский'},
-                {id: 3, title: 'Трениковка'}
-            ],
-            tasks: [
-                {id: 1, title: 'Подстричь газон'},
-                {id: 2, title: 'Погулять с собакой'},
-                {id: 3, title: 'Сходить в магазин', highlight: '#9380ff'}
-            ]
-        },
-        {id: 2, date: '7.11', title:'ВТ',
-            habits: [
-                {id: 1, title: 'Чтение'},
-                {id: 2, title: 'Английский'},
-                {id: 3, title: 'Трениковка'}
-            ],
-            tasks: [
-                {id: 4, title: 'Лабораторная', time: '14:00'}
-            ]
-        },
-        {id: 3, date: '8.11', title:'СР',
-            habits: [
-                {id: 1, title: 'Чтение'},
-                {id: 2, title: 'Английский'},
-                {id: 3, title: 'Трениковка'}
-            ],
-            tasks: [
-                {id: 7, title: 'Написать доклад', time: '10:45'},
-                {id: 8, title: 'Помыть машину'},
-                {id: 9, title: 'Полить цветы'},
-                {id: 10, title: 'Созвон', time: '13:45'},
-                {id: 11, title: 'Выступление', time: '15:00', },
-                {id: 12, title: 'Прогулка', time: '19:00'}
-            ]
-        },
-        {id: 4, date: '9.11', title:'ЧТ',
-            habits: [
-                {id: 1, title: 'Чтение'},
-                {id: 2, title: 'Английский'},
-                {id: 3, title: 'Трениковка'}
-            ],
-            tasks: [
-                {id: 10, title: 'Огород', time: '10:00', highlight: '#f4ffcf'},
-            ]
-        },
-        {id: 5, date: '10.11', title:'ПТ',
-            habits: [
-                {id: 1, title: 'Чтение'},
-                {id: 2, title: 'Английский'},
-                {id: 3, title: 'Трениковка'}
-            ],
-            tasks: [
-                {id: 13, title: 'Погулять с собакой'},
-                {id: 14, title: 'Приготовить ужин', time: '18:00'}
-            ]
-        },
-        {id: 6, date: '11.11', title:'СБ',
-            habits: [
-                {id: 1, title: 'Чтение'},
-                {id: 2, title: 'Английский'},
-                {id: 3, title: 'Трениковка'}
-            ],
-            tasks: []
-        },
-        {id: 7, date: '12.11', title:'ВС',
-            habits: [
-                {id: 1, title: 'Чтение'},
-                {id: 2, title: 'Английский'},
-                {id: 3, title: 'Трениковка'}
-            ],
-            tasks: [
-                {id: 19, title: 'Просмотр фильма', highlight: '#34eb8c'},
-                {id: 20, title: 'Уборка'}
-            ]
-        },
-    ])
+    useEffect(() => {
+        fetchTasks(null).then(data => {
+            dispatch({type: LOAD_TASKS_ACTION, payload: data})
+        })
+    }, [dispatch])
 
+    const currentMonday = startOfWeek(new Date(), {weekStartsOn: 1})
+    const weekDays = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС']
+
+    const taskList = useSelector(state => state.tasks.taskList)
+
+    const [weekIndex, setWeekIndex] = useState(0)
+    const [currentTask, setCurrentTask] = useState(null)
+    const [openPopup, setOpenPopup] = useState(false)
     const [taskInputs, setTaskInputs] = useState({})
-
-    const [currentBoard, setCurrentBoard] = useState(null)
-    const [currentItem, setCurrentItem] = useState(null)
 
     const taskFieldsHandler = e => {
         setTaskInputs(prevState => ({ ...prevState, [e.target.name]: e.target.value }))
     }
 
-    const addTaskHandler = e => {
-        const currentValue = taskInputs[e.target.name]
-        if (!currentValue) {
+    const checkboxHandler = (task, checked) => {
+        dispatch({type: UPDATE_TASK_ACTION, payload: {...task, isComplete: checked}})
+    }
+
+    const openTaskHandler = (task) => {
+        setCurrentTask(task)
+        setOpenPopup(true)
+    }
+
+    const addTaskHandler = (e, date) => {
+        const currentName = taskInputs[e.target.name]
+        if (!currentName) {
             return
         }
-        createTask({name: currentValue})
+        createTask({name: currentName, date})
             .then(data => {
-                setTaskInputs(prevState => ({ ...prevState, [e.target.name]: '' }))
-                console.log(data)
-                // Add in List (Redux)
+                dispatch({type: ADD_TASK_ACTION, payload: data})
             })
             .catch(err => {
                 alert(err)
             })
+        setTaskInputs(prevState => ({ ...prevState, [e.target.name]: '' }))
     }
 
-    function dragOverHandler(e) {
-        e.preventDefault()
+    const closeTaskHandler = () => setOpenPopup(false)
+
+    const previousWeekHandler = () => {
+        setWeekIndex(weekIndex - 1)
     }
 
-    function dragStartHandler(e, board, item) {
-        setCurrentBoard(board)
-        setCurrentItem(item)
-    }
-
-    function dropHandler(e, board, item) {
-        e.preventDefault()
-        const currentIndex = currentBoard.tasks.indexOf(currentItem)
-        currentBoard.tasks.splice(currentIndex, 1)
-        const dropIndex = board.tasks.indexOf(item)
-        board.tasks.splice(dropIndex + 1, 0, currentItem)
-        setBoards(boards.map(b => {
-            if(b.id === board.id) {
-                return board
-            }
-            if(b.id === currentBoard.id) {
-                return currentBoard
-            }
-            return b
-        }))
-    }
-
-    function dropCardHandler(e, board) {
-        e.preventDefault()
-        console.log(board.tasks)
-        board.tasks.push(currentItem)
-        const currentIndex = currentBoard.tasks.indexOf(currentItem)
-        currentBoard.tasks.splice(currentIndex, 1)
-        setBoards(boards.map(b => {
-            if(b.id === board.id) {
-                return board
-            }
-            if(b.id === currentBoard.id) {
-                return currentBoard
-            }
-            return b
-        }))
+    const nextWeekHandler = () => {
+        setWeekIndex(weekIndex + 1)
     }
 
     return (
@@ -172,77 +76,78 @@ const CalendarPage = () => {
             <div className='calendar-header'>
                 <Menu/>
                 <Typography variant='h4'>Календарь</Typography>
-                <div>
-                    <IconButton>
+                <Stack direction='row' spacing={1}
+                    style={{display: 'flex', alignItems: 'center'}}
+                >
+                    <IconButton onClick={previousWeekHandler}>
                         <ChevronLeftIcon sx={{color: 'black'}}/>
                     </IconButton>
-                    <IconButton>
+                    <Typography width={120} textAlign={'center'} variant='h5'>{format(addDays(currentMonday, weekIndex * 7), 'MMMM')}</Typography>
+                    <IconButton onClick={nextWeekHandler}>
                         <ChevronRightIcon sx={{color: 'black'}}/>
                     </IconButton>
-                </div>
+                </Stack>
             </div>
             <div className='week'>
-                {boards.map((board, boardIndex) =>
-                    <Paper
-                        elevation={4}
-                        className='board'
-                        onDragOver={(e) => dragOverHandler(e)}
-                        onDrop={(e) => dropCardHandler(e, board)}
-                    >
-                        <div className='board__header'>
-                            <Typography variant='h5'>{board.title}</Typography>
-                            <Typography variant='h5'>{board.date}</Typography>
-                        </div>
+                {weekDays.map((weekDay, dayIndex) =>
+                    <Paper elevation={3} className='board' key={dayIndex}>
+                        <Box
+                            className='board__header'
+                            sx={{backgroundColor: format(new Date(), 'yyyy-MM-dd') === format(addDays(currentMonday, weekIndex * 7 + dayIndex), 'yyyy-MM-dd') ? 'lime' : 'none'}}
+                        >
+                            <Typography variant='h5'>{weekDay}</Typography>
+                            <Typography variant='h5'>{format(addDays(currentMonday, weekIndex * 7 + dayIndex), 'dd')}</Typography>
+                        </Box>
                         <Divider sx={{mt: 1, mb: 1}}/>
                         <div className='board__habit-list'>
-                            {board.habits.map(habit =>
-                                <div className='board__habit'>
-                                    <Checkbox
-                                        color="default"
-                                        icon={<CloseIcon/>}
-                                        checkedIcon={<CheckIcon/>}
-                                    />
-                                    <div className='board__habit-name'>{habit.title}</div>
-                                </div>
-                            )}
+                            habits
                         </div>
                         <Divider sx={{mt: 2, mb: 2}}/>
                         <div className='board__task-list'>
                             <div className='board__add-task' style={{marginBottom: 15}}>
                                 <TextField
-                                    name={'field' + boardIndex}
-                                    value={taskInputs['field' + boardIndex] || ''}
-                                    onBlur={addTaskHandler}
+                                    name={'field' + dayIndex}
+                                    value={taskInputs['field' + dayIndex] || ''}
+                                    onBlur={e => addTaskHandler(e, format(addDays(currentMonday, weekIndex * 7 + dayIndex), 'yyyy-MM-dd'))}
                                     onChange={taskFieldsHandler}
                                     // 2. onKeyDown={addTask} ||||| if (e.key === 'Enter')
                                     variant="standard"
                                 />
                             </div>
-                            {board.tasks.map(task =>
-                                <Paper
-                                    elevation={2}
-                                    className='board__task'
-                                    onDragOver={(e) => dragOverHandler(e)}
-                                    onDragStart={(e) => dragStartHandler(e, board, task)}
-                                    onDrop={(e) => dropHandler(e, board, task)}
-                                    draggable={true}
-                                    sx={{background: task.highlight}}
-                                >
-                                    <div className='board__task-content'>
-                                        <div className='board__task-time'>{task.time}</div>
-                                        <div className='board__task-name'>{task.title}</div>
-                                    </div>
-                                    <Checkbox
-                                        color="default"
-                                        icon={<RadioButtonUncheckedIcon/>}
-                                        checkedIcon={<CheckCircleIcon/>}
-                                    />
-                                </Paper>
+                            {taskList.map((task) =>
+                                format(addDays(currentMonday, weekIndex * 7 + dayIndex), 'yyyy-MM-dd') === task.date
+                                    ?
+                                    <Paper
+                                        key={task.id}
+                                        elevation={1}
+                                        className='board__task'
+                                        sx={{background: task.highlightColor}}
+                                    >
+                                        <div className='board__task-content'>
+                                            <div className='board__task-time' style={{color: 'white'}}>{task.time}</div>
+                                            <div className='board__task-name' style={{cursor: 'pointer'}} onClick={() => openTaskHandler(task)}>{task.name}</div>
+                                        </div>
+                                        <Checkbox
+                                            checked={task.isComplete}
+                                            onChange={(event, checked) => checkboxHandler(task, checked)}
+                                            color="default"
+                                            icon={<RadioButtonUncheckedIcon/>}
+                                            checkedIcon={<CheckCircleIcon/>}
+                                        />
+                                    </Paper>
+                                    :
+                                    <div key={task.id}></div>
                             )}
                         </div>
                     </Paper>
                 )}
             </div>
+            <Popup openPopup={openPopup} setOpenPopup={setOpenPopup}>
+                <TaskForm
+                    closeTaskHandler={closeTaskHandler}
+                    currentTask={currentTask}
+                />
+            </Popup>
         </div>
     )
 }

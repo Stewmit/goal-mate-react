@@ -5,53 +5,30 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import {deleteAccount} from "../../http/userAPI";
-import {LOGIN_ROUTE, SET_IS_AUTH_ACTION, SET_USER_ACTION} from "../../utils/consts";
-import {useDispatch} from "react-redux";
-import {useNavigate} from "react-router-dom";
 
-const AccountDeleteAlert = (props) => {
+const AlertDialog = (props) => {
 
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-
-    const logout = () => {
-        navigate(LOGIN_ROUTE)
-        localStorage.setItem('token', '')
-        dispatch({type: SET_IS_AUTH_ACTION, payload: false})
-        dispatch({type: SET_USER_ACTION, payload: {}})
-    }
-
-    const deleteHandler = async () => {
-        try {
-            let data = await deleteAccount(props.user.id)
-            logout()
-        }
-        catch (e) {
-            alert(e.response.data.message)
-        }
-        props.closeHandler()
-    }
+    const {open, closeHandler, title, message, action} = props
 
     return (
         <Dialog
-            open={props.open}
-            onClose={props.closeHandler}
+            open={open}
+            onClose={closeHandler}
         >
             <DialogTitle>
-                {"Удаление аккаунта"}
+                {title}
             </DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Вы уверены, что хотите удалить аккаунт?
+                    {message}
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={deleteHandler}>Удалить</Button>
-                <Button onClick={props.closeHandler}>Отмена</Button>
+                <Button color='primary' onClick={action}>Удалить</Button>
+                <Button color='error' onClick={closeHandler}>Отмена</Button>
             </DialogActions>
         </Dialog>
     )
 }
 
-export default AccountDeleteAlert
+export default AlertDialog

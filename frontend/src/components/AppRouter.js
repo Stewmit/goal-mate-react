@@ -6,7 +6,7 @@ import { DEFAULT_ROUTE } from '../utils/consts'
 
 const AppRouter = () => {
 
-    const isAuth = useSelector(state => state.isAuth)
+    const isAuth = useSelector(state => state.user.isAuth)
 
     return (
         <Routes>
