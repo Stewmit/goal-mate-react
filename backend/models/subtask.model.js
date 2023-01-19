@@ -7,6 +7,9 @@ const Subtask = sequelize.define('subtask', {
         primaryKey: true,
         autoIncrement: true
     },
+    order: {
+        type: DataTypes.INTEGER
+    },
     name: {
         type: DataTypes.STRING
     },

@@ -67,7 +67,10 @@
 }
 
 .board__task-name {
-
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 130px;
 }
 
 .task {

@@ -14,7 +14,7 @@ Task.belongsTo(User)
 User.hasMany(Goal)
 Goal.belongsTo(User)
 
-Task.hasMany(Subtask)
+Task.hasMany(Subtask, {onDelete: 'CASCADE'})
 Subtask.belongsTo(Task)
 
 Goal.hasMany(Task)

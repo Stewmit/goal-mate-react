@@ -14,12 +14,14 @@ export const taskReducer = (state = defaultState, action) => {
             return {...state, taskList: [...state.taskList, action.payload]}
 
         case UPDATE_TASK_ACTION:
-            state.taskList.forEach((task, index, list) => {
+            const updatedList = state.taskList
+            updatedList.forEach((task, index, list) => {
                 if (task.id === action.payload.id) {
                     list[index] = action.payload
                 }
             })
-            return state
+
+            return {...state, taskList: updatedList}
 
         case DELETE_TASK_ACTION:
             const newList = state.taskList.filter(task => task.id !== action.payload.id)

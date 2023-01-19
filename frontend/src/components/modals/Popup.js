@@ -1,14 +1,12 @@
 import React from 'react'
-import {Box, Container, IconButton, Modal} from "@mui/material";
+import {Box, Container, Modal} from "@mui/material";
 import './Popup.css'
-import CloseIcon from '@mui/icons-material/Close';
 
 const Popup = (props) => {
 
-    const {openPopup, setOpenPopup} = props
+    const {openPopup} = props
 
     return (
-        // Перенести сюда оформление окна
         <Modal open={openPopup}>
             <Box>
                 <Container
@@ -27,11 +25,6 @@ const Popup = (props) => {
                         borderRadius: 3,
                     }}
                 >
-                    <div style={{display: "flex", justifyContent: "right", width: '100%'}}>
-                        <IconButton onClick={()=>{setOpenPopup(false)}}>
-                            <CloseIcon/>
-                        </IconButton>
-                    </div>
                     {props.children}
                 </Container>
             </Box>

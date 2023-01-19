@@ -8,7 +8,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 const AlertDialog = (props) => {
 
-    const {open, closeHandler, title, message, action} = props
+    const {title, message, open, closeHandler, action} = props
+
+    const actionHandler = () => {
+        action()
+        closeHandler()
+    }
 
     return (
         <Dialog
@@ -24,7 +29,7 @@ const AlertDialog = (props) => {
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button color='primary' onClick={action}>Удалить</Button>
+                <Button color='primary' onClick={actionHandler}>Удалить</Button>
                 <Button color='error' onClick={closeHandler}>Отмена</Button>
             </DialogActions>
         </Dialog>
