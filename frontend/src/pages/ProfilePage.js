@@ -1,30 +1,32 @@
 import React, {useState} from 'react'
-import {useSelector} from "react-redux";
-import {Menu} from "../../components/Menu";
+import {useDispatch, useSelector} from "react-redux";
+import {Menu} from "../components/Menu";
 import {Box, Container, Divider, Grid, IconButton, Link, List, ListItem, Paper, Stack, Typography} from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
-import ChangeNameModal from "../../components/modals/profile/ChangeNameModal";
-import ChangeEmailModal from "../../components/modals/profile/ChangeEmailModal";
-import ChangePasswordModal from "../../components/modals/profile/ChangePasswordModal";
-import AccountDeleteDialog from "../../components/alerts/AccountDeleteDialog";
+import ChangeNameModal from "../components/modals/profile/ChangeNameModal";
+import ChangeEmailModal from "../components/modals/profile/ChangeEmailModal";
+import ChangePasswordModal from "../components/modals/profile/ChangePasswordModal";
+import AccountDeleteDialog from "../components/alerts/AccountDeleteDialog";
+import {useEffect} from "react";
+import {fetchTasks} from "../http/taskAPI";
+import {loadTasks} from "../store/reducers/taskSlice";
 
 const ProfilePage = () => {
 
+    const dispatch = useDispatch()
     const user = useSelector(state => state.user.user)
+    const tasks = useSelector(state => state.task.tasks)
 
     const [openChangeName, setOpenChangeName] = useState(false)
     const [openChangeEmail, setOpenChangeEmail] = useState(false)
     const [openChangePassword, setOpenChangePassword] = useState(false)
     const [openDeleteAccount, setOpenDeleteAccount] = useState(false)
 
-    const openChangeNameHandler = () => setOpenChangeName(true)
-    const closeChangeNameHandler = () => setOpenChangeName(false)
-    const openChangeEmailHandler = () => setOpenChangeEmail(true)
-    const closeChangeEmailHandler = () => setOpenChangeEmail(false)
-    const openChangePasswordHandler = () => setOpenChangePassword(true)
-    const closeChangePasswordHandler = () => setOpenChangePassword(false)
-    const openDeleteAccountHandler = () => setOpenDeleteAccount(true)
-    const closeDeleteAccountHandler = () => setOpenDeleteAccount(false)
+    useEffect(() => {
+        fetchTasks().then(data => {
+            dispatch(loadTasks(data))
+        })
+    }, [])
 
     return (
         <Box>
@@ -65,7 +67,7 @@ const ProfilePage = () => {
                                     >
                                         {`${user.name} ${user.surname}`}
                                     </Typography>
-                                    <IconButton size={'small'} sx={{marginLeft: 1}} onClick={openChangeNameHandler}>
+                                    <IconButton size={'small'} sx={{marginLeft: 1}} onClick={() => setOpenChangeName(true)}>
                                         <EditIcon fontSize='inherit'/>
                                     </IconButton>
                                 </ListItem>
@@ -79,15 +81,15 @@ const ProfilePage = () => {
                                         marginBottom: 2
                                     }}
                                 >
-                                    <Stack direction={'row'} spacing={2}>
+                                    <Stack direction={'column'}>
                                         <Typography>
-                                            {`Цели: 2/4`}
+                                            {`Задачи: ${tasks.reduce((accumulator, task) => accumulator + (task.isComplete ? 1 : 0), 0)}/${tasks.length}`}
                                         </Typography>
                                         <Typography>
-                                            {`Задачи: 5/15`}
+                                            {`Цели: 0/0`}
                                         </Typography>
                                         <Typography>
-                                            {`Привычки: 3`}
+                                            {`Привычки: 0`}
                                         </Typography>
                                     </Stack>
                                 </ListItem>
@@ -100,13 +102,13 @@ const ProfilePage = () => {
                                         <span style={{fontWeight: 'bold'}}>Почта:</span>
                                         {` ${user.email}`}
                                     </Typography>
-                                    <IconButton size={'small'} sx={{marginLeft: 1}} onClick={openChangeEmailHandler}>
+                                    <IconButton size={'small'} sx={{marginLeft: 1}} onClick={() => setOpenChangeEmail(true)}>
                                         <EditIcon fontSize='inherit'/>
                                     </IconButton>
                                 </ListItem>
                                 <ListItem>
                                     <Link
-                                        onClick={openChangePasswordHandler}
+                                        onClick={() => setOpenChangePassword(true)}
                                         sx={{
                                             color: '#4287f5',
                                             cursor: 'pointer',
@@ -120,7 +122,7 @@ const ProfilePage = () => {
                                 </ListItem>
                                 <ListItem>
                                     <Link
-                                        onClick={openDeleteAccountHandler}
+                                        onClick={() => setOpenDeleteAccount(true)}
                                         sx={{
                                             color: 'red',
                                             cursor: 'pointer',
@@ -137,10 +139,10 @@ const ProfilePage = () => {
                     </Grid>
                 </Paper>
             </Container>
-            <ChangeNameModal open={openChangeName} closeHandler={closeChangeNameHandler} user={user} />
-            <ChangeEmailModal open={openChangeEmail} closeHandler={closeChangeEmailHandler} user={user} />
-            <ChangePasswordModal open={openChangePassword} closeHandler={closeChangePasswordHandler} user={user} />
-            <AccountDeleteDialog open={openDeleteAccount} closeHandler={closeDeleteAccountHandler} user={user}/>
+            <ChangeNameModal open={openChangeName} closeHandler={() => setOpenChangeName(false)} user={user} />
+            <ChangeEmailModal open={openChangeEmail} closeHandler={() => setOpenChangeEmail(false)} user={user} />
+            <ChangePasswordModal open={openChangePassword} closeHandler={() => setOpenChangePassword(false)} user={user} />
+            <AccountDeleteDialog open={openDeleteAccount} closeHandler={() => setOpenDeleteAccount(false)} user={user}/>
         </Box>
     )
 }

@@ -102,7 +102,7 @@ export const Menu = () => {
                                     <ListItemIcon>
                                         <FlagIcon />
                                     </ListItemIcon>
-                                    <ListItemText primary={'Цели'} />
+                                    <ListItemText primary={'Цели'} secondary={'Скоро'} />
                                 </ListItemButton>
                             </ListItem>
                             <ListItem disablePadding>
@@ -110,7 +110,7 @@ export const Menu = () => {
                                     <ListItemIcon>
                                         <LoopIcon />
                                     </ListItemIcon>
-                                    <ListItemText primary={'Привычки'} />
+                                    <ListItemText primary={'Привычки'} secondary={'Скоро'} />
                                 </ListItemButton>
                             </ListItem>
                             <ListItem disablePadding>

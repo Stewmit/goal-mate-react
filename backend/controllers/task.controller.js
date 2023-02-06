@@ -1,10 +1,12 @@
 const ApiError = require('../error/ApiError')
 const Task = require("../models/task.model")
 const Subtask = require("../models/subtask.model")
+const {Op} = require("sequelize");
 
 class TaskController {
     async createTask(req, res) {
         const {name, time, date, description, highlightColor, isComplete, subtasks} = req.body
+
         const newTask = await Task.create({
             name,
             time,
@@ -14,12 +16,13 @@ class TaskController {
             isComplete,
             userId: req.user.id
         })
-        // if (subtasks) {
-        //     for (let i = 0; i < subtasks.length; i++) {
-        //         let tempSubtask = await Subtask.create({name: subtasks[i].name, order: subtasks[i].order, isComplete: subtasks[i].isComplete})
-        //         await newTask.addSubtask(tempSubtask)
-        //     }
-        // }
+
+        if (subtasks) {
+            for (let i = 0; i < subtasks.length; i++) {
+                let tempSubtask = await Subtask.create({name: subtasks[i].name, order: i+1, isComplete: subtasks[i].isComplete, taskId: newTask.id})
+                await newTask.addSubtask(tempSubtask)
+            }
+        }
 
         const task = await Task.findOne({
             where: { id: newTask.id },
@@ -34,44 +37,66 @@ class TaskController {
         return res.json(task)
     }
 
-    async createSubtask(req, res) {
-        const {name, isComplete, order, taskId} = req.body
-
-        const newSubtask = await Subtask.create({
-            name,
-            isComplete,
-            order,
-            taskId
-        })
-
-        return res.json(newSubtask)
-    }
-
     async getAll(req, res) {
-        const tasks = await Task.findAll({
-            where: {
+
+        const {sortingType, startDate, endDate} = req.query
+
+        let conditions = {}
+
+        if (startDate && endDate) {
+            conditions = {
+                [Op.and]: [
+                    {
+                        userId: req.user.id
+                    },
+                    {
+                        date: {
+                            [Op.between]: [startDate, endDate]
+                        }
+                    }
+                ]
+            }
+        }
+        else {
+            conditions = {
                 userId: req.user.id
-            },
+            }
+        }
+
+        const tasks = await Task.findAll({
+            where: conditions,
             include: [{
                 model: Subtask,
             }],
             order: [
+                [sortingType ? sortingType : 'date', 'ASC'],
                 [Subtask, 'order', 'ASC']
             ]
         })
+
         return res.json(tasks)
     }
 
     async updateTask(req, res) {
         const data = req.body
         const id = data.id
+        const subtasks = data.subtasks
 
-        await Task.update({...data},
-            {
-                where: {
-                    id
-                },
-            })
+        const taskToUpdate = await Task.findOne({where: { id }})
+        taskToUpdate.update({...data})
+
+        await Subtask.destroy({
+            where: {
+                taskId: id
+            },
+        })
+
+        if (subtasks) {
+            for (let i = 0; i < subtasks.length; i++) {
+                let tempSubtask = await Subtask.create({name: subtasks[i].name, order: i+1, isComplete: subtasks[i].isComplete, taskId: taskToUpdate.id})
+                await taskToUpdate.addSubtask(tempSubtask)
+            }
+        }
 
         return res.json({message: 'Task was updated!'})
     }
@@ -86,32 +111,6 @@ class TaskController {
         })
 
         return res.json({message: 'Task was deleted!'})
-    }
-
-    async deleteSubtask(req, res) {
-        const {id} = req.body
-
-        await Subtask.destroy({
-            where: {
-                id
-            },
-        })
-
-        return res.json({message: 'Subtask was deleted!'})
-    }
-
-    async updateSubtask(req, res) {
-        const data = req.body
-        const id = data.id
-
-        await Subtask.update({...data},
-            {
-                where: {
-                    id
-                },
-            })
-
-        return res.json({message: 'Subtask was updated!'})
     }
 }
 

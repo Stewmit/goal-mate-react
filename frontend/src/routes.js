@@ -1,13 +1,13 @@
-import CalendarPage from './pages/main_pages/CalendarPage'
+import CalendarPage from './pages/CalendarPage'
 import ChatPage from './pages/main_pages/ChatPage'
 import FriendsPage from './pages/main_pages/FriendsPage'
-import GoalsPage from './pages/main_pages/GoalsPage'
+import GoalPage from './pages/main_pages/GoalPage'
 import HabitsPage from './pages/main_pages/HabitsPage'
 import MyDay from './pages/main_pages/MyDay'
-import ProfilePage from './pages/main_pages/ProfilePage'
-import TasksPage from './pages/main_pages/TasksPage'
-import AuthPage from './pages/main_pages/AuthPage'
-import DefaultPage from './pages/main_pages/DefaultPage'
+import ProfilePage from './pages/ProfilePage'
+import TaskPage from './pages/TaskPage'
+import AuthPage from './pages/AuthPage'
+import StartPage from './pages/StartPage'
 import {CALENDAR_ROUTE, CHAT_ROUTE, DEFAULT_ROUTE, FRIENDS_ROUTE, GOALS_ROUTE, HABITS_ROUTE, LOGIN_ROUTE, MY_DAY_ROUTE, PROFILE_ROUTE, REGISTRATION_ROUTE, TASKS_ROUTE} from './utils/consts'
 
 export const authRoutes = [
@@ -25,7 +25,7 @@ export const authRoutes = [
     },
     {
         path: GOALS_ROUTE,
-        Component: GoalsPage
+        Component: GoalPage
     },
     {
         path: HABITS_ROUTE,
@@ -41,7 +41,7 @@ export const authRoutes = [
     },
     {
         path: TASKS_ROUTE,
-        Component: TasksPage
+        Component: TaskPage
     }
 ]
 
@@ -56,6 +56,6 @@ export const publicRoutes = [
     },
     {
         path: DEFAULT_ROUTE,
-        Component: DefaultPage
+        Component: StartPage
     }
 ]

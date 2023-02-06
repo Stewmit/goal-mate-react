@@ -1,17 +1,12 @@
 import React, {useState} from 'react'
-import './CalendarPage.css'
-import TaskModal from "../../components/modals/Popup";
-import {Box, Checkbox, Chip, Container, Fab, IconButton, Paper, Stack, Typography} from "@mui/material";
+import {Checkbox, Chip, Container, Fab, Paper, Typography} from "@mui/material";
 import {Menu} from "../../components/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import './TasksPage.css'
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AddIcon from '@mui/icons-material/Add';
 import GoalModal from "../../components/modals/GoalModal";
 
-const GoalsPage = () => {
+const GoalPage = () => {
 
     const [openGoalModal, setOpenGoalModal] = useState(false)
 
@@ -64,7 +59,14 @@ const GoalsPage = () => {
                     </Paper>
                 )}
             </Container>
-            <Fab color="primary" sx={{left: '170vh', marginTop: '70px'}} onClick={() => setOpenGoalModal(true)}>
+            <Fab color="primary" sx={{
+                margin: 0,
+                top: 'auto',
+                right: 20,
+                bottom: 20,
+                left: 'auto',
+                position: 'fixed',
+            }}>
                 <AddIcon />
             </Fab>
             <GoalModal open={openGoalModal} closeHandler={() => setOpenGoalModal(false)} />
@@ -72,4 +74,4 @@ const GoalsPage = () => {
     )
 }
 
-export default GoalsPage
+export default GoalPage

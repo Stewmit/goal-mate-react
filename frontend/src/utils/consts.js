@@ -12,8 +12,3 @@ export const DEFAULT_ROUTE = '/'
 
 export const SET_IS_AUTH_ACTION = 'SET_IS_AUTH'
 export const SET_USER_ACTION = 'SET_USER'
-
-export const ADD_TASK_ACTION = 'ADD_TASK'
-export const LOAD_TASKS_ACTION = 'LOAD_TASKS'
-export const UPDATE_TASK_ACTION = 'UPDATE_TASK'
-export const DELETE_TASK_ACTION = 'DELETE_TASK'

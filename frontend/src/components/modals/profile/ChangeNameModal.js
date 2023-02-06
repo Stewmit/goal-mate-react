@@ -3,6 +3,8 @@ import {Button, Container, Modal, Stack, TextField, Typography} from "@mui/mater
 import {editUser} from "../../../http/userAPI";
 import {useDispatch} from "react-redux";
 import {SET_USER_ACTION} from "../../../utils/consts";
+import {editLocalTask} from "../../../store/reducers/taskSlice";
+import {setUser} from "../../../store/reducers/userSlice";
 
 const ChangeNameModal = (props) => {
 
@@ -14,10 +16,15 @@ const ChangeNameModal = (props) => {
     const changeNameHandler = async () => {
         try {
             let data = await editUser({id: props.user.id, name, surname})
-            dispatch({type: SET_USER_ACTION, payload: {id: data.id, name: data.name, surname: data.surname, email: data.email}})
+            dispatch(setUser({
+                id: data.id,
+                name: data.name,
+                surname: data.surname,
+                email: data.email
+            }))
         }
-        catch (e) {
-            alert(e.response.data.message)
+        catch (err) {
+            alert(err.response.data.message)
         }
         props.closeHandler()
     }

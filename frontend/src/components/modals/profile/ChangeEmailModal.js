@@ -4,6 +4,7 @@ import {useDispatch} from "react-redux";
 import {editUser} from "../../../http/userAPI";
 import {SET_USER_ACTION} from "../../../utils/consts";
 import {Button, Container, Modal, Stack, TextField, Typography} from "@mui/material";
+import {setUser} from "../../../store/reducers/userSlice";
 
 const ChangeEmailModal = (props) => {
     const [email, setEmail] = useState(props.user.email)
@@ -13,10 +14,15 @@ const ChangeEmailModal = (props) => {
     const changeEmailHandler = async () => {
         try {
             let data = await editUser({id: props.user.id, email})
-            dispatch({type: SET_USER_ACTION, payload: {id: data.id, name: data.name, surname: data.surname, email: data.email}})
+            dispatch(setUser({
+                id: data.id,
+                name: data.name,
+                surname: data.surname,
+                email: data.email
+            }))
         }
-        catch (e) {
-            alert(e.response.data.message)
+        catch (err) {
+            alert(err.response.data.message)
         }
         props.closeHandler()
     }

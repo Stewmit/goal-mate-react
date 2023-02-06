@@ -1,9 +1,11 @@
 import React, {useState} from 'react'
-import {Box, Button, Container, Paper, Stack, TextField, Typography} from "@mui/material";
+import {Box, Container, Paper, Stack, TextField, Typography} from "@mui/material";
 import {useLocation, NavLink, useNavigate} from "react-router-dom";
-import {CALENDAR_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE, SET_IS_AUTH_ACTION, SET_USER_ACTION} from "../../utils/consts";
-import {login, registration} from "../../http/userAPI";
+import {CALENDAR_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE} from "../utils/consts";
+import {login, registration} from "../http/userAPI";
 import {useDispatch} from "react-redux";
+import styled from 'styled-components'
+import {authorize, setUser} from "../store/reducers/userSlice";
 
 const AuthPage = () => {
 
@@ -27,8 +29,13 @@ const AuthPage = () => {
             else {
                 data = await registration(name, surname, email, password)
             }
-            dispatch({type: SET_IS_AUTH_ACTION, payload: true})
-            dispatch({type: SET_USER_ACTION, payload: {id: data.id, name: data.name, surname: data.surname, email: data.email}})
+            dispatch(authorize(true))
+            dispatch(setUser({
+                id: data.id,
+                name: data.name,
+                surname: data.surname,
+                email: data.email
+            }))
             navigate(CALENDAR_ROUTE)
         }
         catch (e) {
@@ -36,9 +43,21 @@ const AuthPage = () => {
         }
     }
 
+    const clearRegisterFields = () => {
+        setName('')
+        setSurname('')
+        setEmail('')
+        setPassword('')
+    }
+
+    const clearLoginFields = () => {
+        setEmail('')
+        setPassword('')
+    }
+
     return (
         <Container>
-            <Paper elevation={3} sx={{
+            <Paper elevation={4} sx={{
                 marginLeft: 'auto',
                 marginRight: 'auto',
                 marginTop: '100px',
@@ -46,13 +65,13 @@ const AuthPage = () => {
                 justifyContent: 'top',
                 alignItems: 'center',
                 flexDirection: 'column',
-                width: '550px',
+                width: '60%',
                 height: 'auto',
             }}>
                 <Typography mt={3} fontSize={30} fontWeight={400}>
                     {isLoginPage ? 'Авторизация' : 'Регистрация'}
                 </Typography>
-                <Stack mt={4} mb={6} sx={{width: '60%'}} direction="column" spacing={3}>
+                <Stack mt={4} mb={6} sx={{width: '60%'}} direction="column" spacing={4}>
                     <TextField
                         value={name}
                         onChange={(e) => setName(e.target.value)}
@@ -87,12 +106,12 @@ const AuthPage = () => {
                             {
                                 isLoginPage
                                 ?
-                                    <NavLink style={{ color: '#1565C0', textDecoration: 'none', fontFamily: 'Roboto, sans-serif' }} to={REGISTRATION_ROUTE}>Нет аккаунта</NavLink>
+                                    <NavLink style={{ color: 'steelblue', textDecoration: 'none', fontFamily: 'Roboto, sans-serif' }} onClick={clearLoginFields} to={REGISTRATION_ROUTE}>Нет аккаунта</NavLink>
                                 :
-                                    <NavLink style={{ color: '#1565C0', textDecoration: 'none', fontFamily: 'Roboto, sans-serif' }} to={LOGIN_ROUTE}>Есть аккаунт</NavLink>
+                                    <NavLink style={{ color: 'steelblue', textDecoration: 'none', fontFamily: 'Roboto, sans-serif' }} onClick={clearRegisterFields} to={LOGIN_ROUTE}>Есть аккаунт</NavLink>
                             }
                         </Box>
-                        <Button onClick={signIn} sx={{height: '45px'}} variant={'contained'}>{isLoginPage ? 'Войти' : 'Зарегистрироваться'}</Button>
+                        <SubmitButton onClick={signIn}>{isLoginPage ? 'Войти' : 'Зарегистрироваться'}</SubmitButton>
                     </Stack>
                 </Stack>
             </Paper>
@@ -101,3 +120,13 @@ const AuthPage = () => {
 }
 
 export default AuthPage
+
+const SubmitButton = styled.button`
+  height: 50px;
+  color: black;
+  background-color: lightsteelblue;
+  font-size: 18px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+`

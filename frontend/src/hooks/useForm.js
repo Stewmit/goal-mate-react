@@ -1,55 +1,24 @@
-import React, { useState } from 'react'
-import {format} from "date-fns";
+import { useState } from 'react'
 
 export function useForm(initialValues) {
 
-    const [values, setValues] = useState(initialValues);
-    const [errors, setErrors] = useState({});
+    const [inputs, setInputs] = useState(initialValues)
 
-    const handleInputChange = e => {
-        let { name, value } = e.target
-        setValues({
-            ...values,
+    const handleChange = (name, value) => {
+        setInputs({
+            ...inputs,
             [name]: value
         })
     }
 
-    const handleDateChange = (date) => {
-        setValues({
-            ...values,
-            ['date']: format(date, 'yyyy-MM-dd')
-        })
-    }
-
-    const handleCheckboxChange = e => {
-        let { checked } = e.target
-        setValues({
-            ...values,
-            ['isComplete']: checked
-        })
-    }
-
-    const handleColorChange = (color) => {
-        setValues({
-            ...values,
-            ['highlightColor']: color
-        })
-    }
-
     const resetForm = () => {
-        setValues(initialValues)
-        setErrors({})
+        setInputs(initialValues)
     }
 
     return {
-        values,
-        setValues,
-        errors,
-        setErrors,
-        handleInputChange,
-        handleDateChange,
-        handleCheckboxChange,
-        handleColorChange,
+        inputs,
+        setInputs,
+        handleChange,
         resetForm
     }
 }

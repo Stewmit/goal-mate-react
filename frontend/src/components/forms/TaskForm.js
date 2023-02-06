@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Badge, Checkbox, IconButton, Stack, TextField, Typography} from "@mui/material";
+import {Badge, Button, Checkbox, IconButton, Stack, TextField } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -14,152 +14,110 @@ import AlertDialog from "../alerts/AlertDialog";
 import {deleteTask} from "../../http/taskAPI";
 import {createSubtask, deleteSubtask, updateSubtask} from "../../http/subtaskAPI";
 import {useDispatch} from "react-redux";
-import {DELETE_TASK_ACTION} from "../../utils/consts";
 import {useForm} from "../../hooks/useForm";
 import {Reorder} from 'framer-motion'
 import CloseIcon from "@mui/icons-material/Close";
+import {deleteLocalTask} from "../../store/reducers/taskSlice";
+import {format} from "date-fns"
+import { v4 as uuid} from 'uuid'
 
 const initialValues = {
     id: 0,
     name: '',
     time: '',
-    date: '',
+    date: null,
     description: '',
     highlightColor: '',
-    isComplete: false,
-    subtasks: []
+    isComplete: false
 }
+
+const defaultColors = ['#FFA591', '#FFF000', '#9DFF91', '#91FFFA', '#91B9FF']
 
 const TaskForm = (props) => {
 
-    const {currentTask, addOrEditTask, closeTask} = props
+    const {currentTask, saveTask, closeTask} = props
 
     const dispatch = useDispatch()
-
     const [openAlert, setOpenAlert] = useState(false)
-    const [subtaskInput, setSubtaskInput] = useState('')
+    const [newSubtaskInput, setNewSubtaskInput] = useState('')
+    const [subtasks, setSubtasks] = useState([])
 
-    const defaultColors = ['#FFA591', '#FFF000', '#9DFF91', '#91FFFA', '#91B9FF']
-
-    const {
-        values,
-        setValues,
-        handleInputChange,
-        handleDateChange,
-        handleCheckboxChange,
-        handleColorChange,
-        resetForm
-    } = useForm(initialValues)
-
-    const [subtaskInputs, setSubtaskInputs] = useState({})
+    const taskForm = useForm(initialValues)
 
     const badgeStyle = {
         "& .MuiBadge-badge": {
-            backgroundColor: values.highlightColor,
+            backgroundColor: taskForm.inputs.highlightColor,
         }
     }
 
     useEffect(() => {
         if (currentTask != null) {
-            setValues({
-                ...currentTask
+            taskForm.setInputs({
+                id: currentTask.id,
+                name: currentTask.name,
+                time: currentTask.time,
+                date: currentTask.date,
+                description: currentTask.description,
+                highlightColor: currentTask.highlightColor,
+                isComplete: currentTask.isComplete,
             })
-
-            for (let i = 0; i < currentTask.subtasks.length; i++) {
-                setSubtaskInputs(prevState => ({ ...prevState, ['field' + currentTask.subtasks[i].id]: currentTask.subtasks[i].name }))
-            }
+            setSubtasks(currentTask.subtasks.map(subtask => ({...subtask, number: uuid()})))
         }
-    }, [currentTask, setValues])
+    }, [])
 
-    const handleDelete = async () => {
-        closeTask(resetForm)
-        await deleteTask(currentTask.id)
-        dispatch({type: DELETE_TASK_ACTION, payload: {id: currentTask.id}})
+    const handleExit = () => {
+        closeTask()
+        taskForm.resetForm()
+        setNewSubtaskInput('')
+    }
+
+    const handleSubmit = () => {
+        saveTask({...taskForm.inputs, subtasks: subtasks})
+        handleExit()
+    }
+
+    const handleDeleteTask = async () => {
+        try {
+            await deleteTask(currentTask.id)
+            dispatch(deleteLocalTask(currentTask))
+            handleExit()
+        }
+        catch (err) {
+            alert(err)
+        }
     }
 
     const handleAddSubtask = async () => {
-        const subtask = await createSubtask({
-            name: subtaskInput,
+        const newSubtask = {
+            name: newSubtaskInput,
             isComplete: false,
-            order: values.subtasks.length === 0 ? 1 : values.subtasks[values.subtasks.length - 1].order + 1,
-            taskId: currentTask.id
-        })
-        setValues({
-            ...values,
-            'subtasks': [...values.subtasks, subtask]
-        })
-        setSubtaskInput('')
-        setSubtaskInputs(prevState => ({ ...prevState, ['field' + subtask.id]: subtask.name }))
-    }
-
-    const handleDeleteSubtask = async (id) => {
-        try {
-            await deleteSubtask(id)
-            setValues({
-                ...values,
-                'subtasks': values.subtasks.filter(subtask => subtask.id !== id)
-            })
+            taskId: currentTask?.id,
+            number: uuid()
         }
-        catch (err) {
-            console.error(err)
-        }
+        setSubtasks([...subtasks, newSubtask])
+        setNewSubtaskInput('')
     }
 
     const handleReorderSubtasks = async (newOrder) => {
-        try {
-            for (let i = 0; i < newOrder.length; i++) {
-                newOrder[i].order = i+1
-                await updateSubtask(newOrder[i])
-            }
-            setValues({
-                ...values,
-                'subtasks': newOrder
-            })
-        }
-        catch (err) {
-            console.error(err)
-        }
+        setSubtasks(newOrder)
     }
 
-    const handleSubtaskCheckboxChange = async (currentSubtask) => {
-        try {
-            currentSubtask.isComplete = !currentSubtask.isComplete
-            await updateSubtask(currentSubtask)
-            const updatedSubtasks = values.subtasks
-            updatedSubtasks.forEach((subtask, index, array) => subtask.id === currentSubtask.id ? array[index] = currentSubtask : array[index] = subtask)
-            setValues({
-                ...values,
-                'subtasks': updatedSubtasks
-            })
-        }
-        catch (err) {
-            console.error(err)
-        }
+    const handleSubtaskCheckboxChange = async (currentNumber) => {
+        setSubtasks(subtasks.map(subtask => subtask.number === currentNumber ? {...subtask, isComplete: !subtask.isComplete} : subtask))
     }
 
-    const subtaskFieldsHandler = async (e, currentSubtask) => {
-        try {
-            setSubtaskInputs(prevState => ({ ...prevState, [e.target.name]: e.target.value }))
+    const subtaskFieldsHandler = async (currentNumber, newValue) => {
+        setSubtasks(subtasks.map(subtask => subtask.number === currentNumber ? {...subtask, name: newValue} : subtask))
+    }
 
-            currentSubtask.name = e.target.value
-            await updateSubtask(currentSubtask)
-
-            const updatedSubtasks = values.subtasks
-            updatedSubtasks.forEach((subtask, index, array) => subtask.id === currentSubtask.id ? array[index] = currentSubtask : array[index] = subtask)
-            setValues({
-                ...values,
-                'subtasks': updatedSubtasks
-            })
-        }
-        catch (err) {
-            console.error(err)
-        }
+    const handleDeleteSubtask = async (currentNumber) => {
+        setSubtasks(subtasks.filter(subtask => subtask.number !== currentNumber))
     }
 
     return (
         <div>
             <div style={{display: "flex", justifyContent: "right", width: '100%'}}>
-                <IconButton onClick={() => addOrEditTask(values, resetForm)}>
+                <IconButton onClick={handleExit}>
                     <CloseIcon/>
                 </IconButton>
             </div>
@@ -171,10 +129,9 @@ const TaskForm = (props) => {
                     }}
                     >
                         <input
-                            name="name"
-                            value={values.name}
-                            onChange={handleInputChange}
-
+                            placeholder={taskForm.inputs.name === '' ? 'Название задачи' : ''}
+                            value={taskForm.inputs.name}
+                            onChange={(e) => taskForm.handleChange('name', e.target.value)}
                             style={{
                                 border: "none",
                                 outline: 'none',
@@ -189,11 +146,9 @@ const TaskForm = (props) => {
                             }}
                         >
                             <Checkbox
-                                name="isComplete"
-                                type={"checkbox"}
-                                checked={values.isComplete}
-                                onChange={handleCheckboxChange}
-
+                                type='checkbox'
+                                checked={taskForm.inputs.isComplete}
+                                onChange={(e) => taskForm.handleChange('isComplete', e.target.checked)}
                                 color="default"
                                 icon={<RadioButtonUncheckedIcon sx={{fontSize: '25px'}}/>}
                                 checkedIcon={<CheckCircleIcon sx={{fontSize: '25px'}}/>}
@@ -202,8 +157,8 @@ const TaskForm = (props) => {
                                 <Tippy interactive={true} placement='bottom' content={
                                     <BlockPicker
                                         colors={defaultColors}
-                                        color={values.highlightColor}
-                                        onChange={(color) => handleColorChange(color.hex)}
+                                        color={taskForm.inputs.highlightColor}
+                                        onChange={(color) => taskForm.handleChange('highlightColor', color.hex)}
                                     />
                                 }>
                                     <IconButton>
@@ -219,58 +174,67 @@ const TaskForm = (props) => {
                         </div>
                     </div>
                     <TextField
-                        name="time"
-                        value={values.time}
-                        onChange={handleInputChange}
-
-                        margin={'normal'}
-                        label="Время"
-                        variant="outlined"
+                        label='Время'
+                        value={taskForm.inputs.time}
+                        onChange={(e) => taskForm.handleChange('time', e.target.value)}
                     />
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
-                            name="date"
-                            value={values.date}
-                            onChange={(date) => handleDateChange(date)}
-
-                            label="Дата"
+                            label='Дата'
+                            value={taskForm.inputs.date}
+                            onChange={(date) => taskForm.handleChange('date', format(date, 'yyyy-MM-dd'))}
                             renderInput={(params) => <TextField {...params} />}
                         />
                     </LocalizationProvider>
                     <TextField
-                        name="description"
-                        value={values.description}
-                        onChange={handleInputChange}
-
-                        variant='outlined'
-                        placeholder='Описание'
+                        label='Описание'
+                        value={taskForm.inputs.description}
+                        onChange={(e) => taskForm.handleChange('description', e.target.value)}
                         multiline={true}
                         rows={5}
                     />
+                    <Button variant='outlined' onClick={handleSubmit}>Ok</Button>
                 </Stack>
-                <Stack sx={{width: '300px', marginLeft: '50px'}} mt={1} spacing={2}>
-                    <Typography sx={{fontSize: 20}}>Подзадачи:</Typography>
+                <Stack
+                    sx={{
+                        width: '300px',
+                        marginLeft: '50px',
+                        maxHeight: '450px',
+                        overflow: 'auto'
+                    }}
+                    mt={1}
+                    spacing={2}
+                >
+                    <div style={{fontSize: 20 }}>Подзадачи:</div>
                     {
-                        <Reorder.Group onReorder={(newOrder) => handleReorderSubtasks(newOrder)} values={values.subtasks}>
+                        <Reorder.Group onReorder={(newOrder) => handleReorderSubtasks(newOrder)} values={subtasks}>
                             {
-                                values.subtasks.map(subtask =>
-                                    <Reorder.Item key={subtask.id} value={subtask} className='add-task'>
-                                        <TextField
-                                            variant="standard"
-                                            sx={{width: '80%'}}
-                                            name={'field' + subtask.id}
-                                            value={subtaskInputs['field' + subtask.id] || ''}
-                                            onChange={(e) => subtaskFieldsHandler(e, subtask)}
-                                        />
-                                        <div style={{display: "flex", alignItems: "center"}}>
+                                subtasks.map(subtask =>
+                                    <Reorder.Item key={subtask.number} value={subtask} style={{
+                                        listStyleType: 'none',
+                                        cursor: 'grab',
+                                        marginTop: 10,
+                                        padding: 10,
+                                        borderRadius: 15
+                                    }}>
+                                        <div style={{
+                                            display: "flex",
+                                            alignItems: "center"
+                                        }}>
+                                            <TextField
+                                                variant="standard"
+                                                sx={{width: '80%'}}
+                                                value={subtask.name}
+                                                onChange={(e) => subtaskFieldsHandler(subtask.number, e.target.value)}
+                                            />
                                             <Checkbox
                                                 checked={subtask.isComplete}
                                                 color="default"
                                                 icon={<RadioButtonUncheckedIcon/>}
-                                                onChange={() => handleSubtaskCheckboxChange(subtask)}
+                                                onChange={() => handleSubtaskCheckboxChange(subtask.number)}
                                                 checkedIcon={<CheckCircleIcon/>}
                                             />
-                                            <IconButton onClick={() => handleDeleteSubtask(subtask.id)}>
+                                            <IconButton onClick={() => handleDeleteSubtask(subtask.number)}>
                                                 <DeleteIcon/>
                                             </IconButton>
                                         </div>
@@ -284,8 +248,8 @@ const TaskForm = (props) => {
                             placeholder='Подзадача'
                             variant="standard"
                             sx={{width: '100%'}}
-                            value={subtaskInput}
-                            onChange={e => setSubtaskInput(e.target.value)}
+                            value={newSubtaskInput}
+                            onChange={e => setNewSubtaskInput(e.target.value)}
                         />
                         <IconButton onClick={handleAddSubtask}>
                             <AddIcon/>
@@ -298,7 +262,7 @@ const TaskForm = (props) => {
                 message={'Вы точно хотите удалить задачу?'}
                 open={openAlert}
                 closeHandler={() => setOpenAlert(false)}
-                action={handleDelete}
+                action={handleDeleteTask}
             />
         </div>
     );
