@@ -14,11 +14,11 @@ const Habit = sequelize.define('habit', {
         type: DataTypes.STRING
     },
     startDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         defaultValue: DataTypes.NOW
     },
     endDate: {
-        type: DataTypes.DATE
+        type: DataTypes.DATEONLY
     },
     target: {
         type: DataTypes.INTEGER

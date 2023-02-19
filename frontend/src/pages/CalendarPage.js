@@ -12,12 +12,21 @@ import {addDays, format, startOfWeek} from 'date-fns'
 import Popup from "../components/modals/Popup";
 import TaskForm from "../components/forms/TaskForm";
 import styled from 'styled-components'
+import {addLocalDay, deleteLocalDay, loadHabits} from "../store/reducers/habitSlice";
+import {addDay, createHabit, deleteDay, deleteHabit, fetchHabits} from "../http/habitAPI";
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import {useNavigate} from "react-router-dom";
+import {HABITS_ROUTE} from "../utils/consts";
 
 const weekDays = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС']
 
 const CalendarPage = () => {
 
+    const navigate = useNavigate()
+
     const tasks = useSelector((state) => state.task.tasks)
+    const habits = useSelector((state) => state.habit.habits)
     const dispatch = useDispatch()
     const [today] = useState(new Date())
     const [currentMonday] = useState(startOfWeek(today, {weekStartsOn: 1}))
@@ -27,10 +36,16 @@ const CalendarPage = () => {
     const [openPopup, setOpenPopup] = useState(false)
 
     useEffect(() => {
-        // let startDate = format(currentMonday, 'yyyy-MM-dd')
-        // let endDate = format(addDays(currentMonday, 6), 'yyyy-MM-dd')
-        fetchTasks().then(taskList => {
+        let startDate = format(addDays(currentMonday, weekIndex * 7), 'yyyy-MM-dd')
+        let endDate = format(addDays(currentMonday, weekIndex * 7 + 6), 'yyyy-MM-dd')
+        fetchTasks(null, startDate, endDate).then(taskList => {
             dispatch(loadTasks(taskList))
+        })
+    }, [weekIndex])
+
+    useEffect(() => {
+        fetchHabits().then(habitList => {
+            dispatch(loadHabits(habitList))
         })
     }, [])
 
@@ -100,6 +115,26 @@ const CalendarPage = () => {
         return format(today, 'yyyy-MM-dd') === formatDate(dayIndex, 'yyyy-MM-dd')
     }
 
+    const createOrDeleteHabitDay = async (habit, isChecked, dayIndex) => {
+        if (isChecked) {
+            const habitDay = await addDay({
+                date: formatDate(dayIndex, 'yyyy-MM-dd'),
+                habitId: habit.id
+            })
+            dispatch(addLocalDay(habitDay))
+        }
+        else {
+            const habitDay = habit.habitDays.filter((day) => day.date === formatDate(dayIndex, 'yyyy-MM-dd'))
+            if (habitDay.length === 1) {
+                await deleteDay(habitDay[0].id)
+                dispatch(deleteLocalDay(habitDay[0]))
+            }
+            else {
+                console.error('No appropriate day!')
+            }
+        }
+    }
+
     return (
         <div>
             <CalendarHeader>
@@ -125,7 +160,26 @@ const CalendarPage = () => {
                             </DayBoardDate>
                         </DayBoardHeader>
                         <Divider sx={{mt: 1, mb: 1}}/>
-                        <div>habits</div>
+                        {habits.map(habit => (
+                            <div key={habit.id}>
+                                {
+                                    habit.regularity[dayIndex] === '1'
+                                        ?
+                                        <DayBoardHabit>
+                                            <DayBoardHabitCheckbox
+                                                type="checkbox"
+                                                checked={habit.habitDays.filter(day => day.date === formatDate(dayIndex, 'yyyy-MM-dd')).length > 0}
+                                                onChange={(e) => createOrDeleteHabitDay(habit, e.target.checked, dayIndex)}
+                                            />
+                                            <DayBoardHabitName onClick={() => navigate(HABITS_ROUTE + '/' + habit.id)}>{habit.name}</DayBoardHabitName>
+                                        </DayBoardHabit>
+                                        :
+                                        <DayBoardHabitIgnored onClick={() => navigate(HABITS_ROUTE + '/' + habit.id)}>
+                                            <DayBoardHabitName>{habit.name}</DayBoardHabitName>
+                                        </DayBoardHabitIgnored>
+                                }
+                            </div>
+                        ))}
                         <Divider sx={{mt: 2, mb: 2}}/>
                         <DayBoardTaskList>
                             <AddTaskField
@@ -157,7 +211,7 @@ const CalendarPage = () => {
                                             }
                                             <Checkbox
                                                 checked={task.isComplete}
-                                                onChange={(event, checked) => checkboxHandler(task)}
+                                                onChange={() => checkboxHandler(task)}
                                                 color="default"
                                                 icon={<RadioButtonUncheckedIcon/>}
                                                 checkedIcon={<CheckCircleIcon/>}
@@ -323,4 +377,23 @@ const DayBoardTaskStatusGroup = styled.div`
   display: flex;
   align-items: center;
   gap: 5px;
+`
+
+const DayBoardHabit = styled.div`
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 5px;
+`
+
+const DayBoardHabitIgnored = styled.div`
+  opacity: 0.3;
+`
+
+const DayBoardHabitCheckbox = styled.input`
+  cursor: pointer;
+`
+
+const DayBoardHabitName = styled.div`
+  font-size: 18px;
 `

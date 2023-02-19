@@ -1,12 +1,12 @@
 import React, {useState} from 'react'
-import HabitModal from "../../components/modals/HabitModal";
+import HabitModal from "../components/modals/HabitModal";
 import {Checkbox, Chip, Container, Fab, Paper, Typography} from "@mui/material";
-import {Menu} from "../../components/Menu";
+import {Menu} from "../components/Menu";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AddIcon from '@mui/icons-material/Add';
 
-const HabitsPage = () => {
+const HabitListPage = () => {
 
     const [openHabitModal, setOpenHabitModal] = useState(false)
 
@@ -50,4 +50,4 @@ const HabitsPage = () => {
     )
 }
 
-export default HabitsPage
+export default HabitListPage

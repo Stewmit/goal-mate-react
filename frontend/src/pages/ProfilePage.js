@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {Menu} from "../components/Menu";
 import {Box, Container, Divider, Grid, IconButton, Link, List, ListItem, Paper, Stack, Typography} from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
@@ -9,22 +9,26 @@ import ChangePasswordModal from "../components/modals/profile/ChangePasswordModa
 import AccountDeleteDialog from "../components/alerts/AccountDeleteDialog";
 import {useEffect} from "react";
 import {fetchTasks} from "../http/taskAPI";
-import {loadTasks} from "../store/reducers/taskSlice";
+import {fetchHabits} from "../http/habitAPI";
 
 const ProfilePage = () => {
 
-    const dispatch = useDispatch()
     const user = useSelector(state => state.user.user)
-    const tasks = useSelector(state => state.task.tasks)
 
     const [openChangeName, setOpenChangeName] = useState(false)
     const [openChangeEmail, setOpenChangeEmail] = useState(false)
     const [openChangePassword, setOpenChangePassword] = useState(false)
     const [openDeleteAccount, setOpenDeleteAccount] = useState(false)
 
+    const [tasks, setTasks] = useState([])
+    const [habits, setHabits] = useState([])
+
     useEffect(() => {
         fetchTasks().then(data => {
-            dispatch(loadTasks(data))
+            setTasks(data)
+        })
+        fetchHabits().then(data => {
+            setHabits(data)
         })
     }, [])
 
@@ -89,7 +93,7 @@ const ProfilePage = () => {
                                             {`Цели: 0/0`}
                                         </Typography>
                                         <Typography>
-                                            {`Привычки: 0`}
+                                            {`Привычки: ${habits.length}`}
                                         </Typography>
                                     </Stack>
                                 </ListItem>

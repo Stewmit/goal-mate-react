@@ -2,7 +2,8 @@ import CalendarPage from './pages/CalendarPage'
 import ChatPage from './pages/main_pages/ChatPage'
 import FriendsPage from './pages/main_pages/FriendsPage'
 import GoalPage from './pages/main_pages/GoalPage'
-import HabitsPage from './pages/main_pages/HabitsPage'
+import HabitListPage from './pages/HabitListPage'
+import HabitPage from "./pages/HabitPage"
 import MyDay from './pages/main_pages/MyDay'
 import ProfilePage from './pages/ProfilePage'
 import TaskPage from './pages/TaskPage'
@@ -29,7 +30,11 @@ export const authRoutes = [
     },
     {
         path: HABITS_ROUTE,
-        Component: HabitsPage
+        Component: HabitListPage
+    },
+    {
+        path: HABITS_ROUTE + '/:id',
+        Component: HabitPage
     },
     {
         path: MY_DAY_ROUTE,

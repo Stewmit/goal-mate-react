@@ -1,17 +1,17 @@
 const sequelize = require('../db')
 const {DataTypes} = require('sequelize')
 
-const HabitDay = sequelize.define('habit_day', {
+const HabitDay = sequelize.define('habitDay', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
     date: {
-        type: DataTypes.DATE
+        type: DataTypes.DATEONLY
     },
-    isComplete: {
-        type: DataTypes.BOOLEAN
+    comment: {
+        type: DataTypes.STRING
     }
 })
 
