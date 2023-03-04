@@ -13,9 +13,7 @@ import Popup from "../components/modals/Popup";
 import TaskForm from "../components/forms/TaskForm";
 import styled from 'styled-components'
 import {addLocalDay, deleteLocalDay, loadHabits} from "../store/reducers/habitSlice";
-import {addDay, createHabit, deleteDay, deleteHabit, fetchHabits} from "../http/habitAPI";
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
+import {addDay, deleteDay, fetchHabits} from "../http/habitAPI";
 import {useNavigate} from "react-router-dom";
 import {HABITS_ROUTE} from "../utils/consts";
 
@@ -28,6 +26,7 @@ const CalendarPage = () => {
     const tasks = useSelector((state) => state.task.tasks)
     const habits = useSelector((state) => state.habit.habits)
     const dispatch = useDispatch()
+
     const [today] = useState(new Date())
     const [currentMonday] = useState(startOfWeek(today, {weekStartsOn: 1}))
     const [weekIndex, setWeekIndex] = useState(0)

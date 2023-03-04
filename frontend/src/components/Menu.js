@@ -110,7 +110,7 @@ export const Menu = () => {
                                     <ListItemIcon>
                                         <LoopIcon />
                                     </ListItemIcon>
-                                    <ListItemText primary={'Привычки'} secondary={'Скоро'} />
+                                    <ListItemText primary={'Привычки'} />
                                 </ListItemButton>
                             </ListItem>
                             <ListItem disablePadding>

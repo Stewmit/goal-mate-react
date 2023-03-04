@@ -23,9 +23,9 @@ export const habitSlice = createSlice({
                 }
             })
         },
-        // addLocalHabit: (state, action) => {
-        //     state.habits.push(action.payload)
-        // },
+        addLocalHabit: (state, action) => {
+            state.habits.push(action.payload)
+        },
         // editLocalHabit: (state, action) => {
         //     state.habits.forEach((task, index, list) => {
         //         if (task.id === action.payload.id) {
@@ -39,6 +39,6 @@ export const habitSlice = createSlice({
     }
 })
 
-export const { loadHabits, addLocalDay, deleteLocalDay } = habitSlice.actions
+export const { loadHabits, addLocalDay, deleteLocalDay, addLocalHabit } = habitSlice.actions
 
 export default habitSlice.reducer

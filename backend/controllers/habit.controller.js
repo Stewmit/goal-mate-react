@@ -1,8 +1,6 @@
 const ApiError = require('../error/ApiError')
-const {Op} = require("sequelize");
-const Habit = require("../models/habit.model");
-const HabitDay = require("../models/habit_day.model");
-const Task = require("../models/task.model");
+const Habit = require("../models/habit.model")
+const HabitDay = require("../models/habit_day.model")
 
 class HabitController {
     async createHabit(req, res) {

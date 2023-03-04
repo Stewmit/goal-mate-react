@@ -12,7 +12,6 @@ import PaletteIcon from '@mui/icons-material/Palette';
 import Tippy from "@tippyjs/react";
 import AlertDialog from "../alerts/AlertDialog";
 import {deleteTask} from "../../http/taskAPI";
-import {createSubtask, deleteSubtask, updateSubtask} from "../../http/subtaskAPI";
 import {useDispatch} from "react-redux";
 import {useForm} from "../../hooks/useForm";
 import {Reorder} from 'framer-motion'
