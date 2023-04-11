@@ -179,7 +179,7 @@ const TaskForm = (props) => {
                     />
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
-                            label='Дата'
+                            label="Дата"
                             value={taskForm.inputs.date}
                             onChange={(date) => taskForm.handleChange('date', format(date, 'yyyy-MM-dd'))}
                             renderInput={(params) => <TextField {...params} />}
