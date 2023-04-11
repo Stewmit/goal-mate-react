@@ -9,6 +9,3 @@ export const TASKS_ROUTE = '/tasks'
 export const REGISTRATION_ROUTE = '/registration'
 export const LOGIN_ROUTE = '/login'
 export const DEFAULT_ROUTE = '/'
-
-export const SET_IS_AUTH_ACTION = 'SET_IS_AUTH'
-export const SET_USER_ACTION = 'SET_USER'

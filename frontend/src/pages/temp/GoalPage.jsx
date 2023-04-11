@@ -1,10 +1,11 @@
 import React, {useState} from 'react'
-import {Checkbox, Chip, Container, Fab, Paper, Typography} from "@mui/material";
-import {Menu} from "../../components/Menu";
-import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import AddIcon from '@mui/icons-material/Add';
-import GoalModal from "../../components/modals/GoalModal";
+import {Checkbox, Chip, Container, Fab, Paper, Typography} from "@mui/material"
+import {Menu} from "../../components/Menu.jsx"
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"
+import CheckCircleIcon from "@mui/icons-material/CheckCircle"
+import AddIcon from '@mui/icons-material/Add'
+import GoalModal from "../../components/modals/GoalModal.jsx"
+import styled from "styled-components";
 
 const GoalPage = () => {
 
@@ -26,13 +27,13 @@ const GoalPage = () => {
 
     return (
         <div>
-            <div className='header'>
+            <GoalPageHeader>
                 <Menu/>
-                <Typography variant='h4'>Список целей</Typography>
-            </div>
-            <Container className='task-list__list'>
+                <GoalPageHeaderText>Список целей</GoalPageHeaderText>
+            </GoalPageHeader>
+            <Container>
                 {goalList.map((goal, index) =>
-                    <Paper elevation={3} className='task-list__task' style={{backgroundColor: goal.highlight}}>
+                    <Paper elevation={3}>
                         <div style={{display: 'flex', alignItems: 'center'}}>
                             <img src={imgs[index]} alt="img" style={{width: '200px', height: '200px', borderRadius: '20px'}} />
                             <div style={{marginLeft: '30px'}}>
@@ -75,3 +76,14 @@ const GoalPage = () => {
 }
 
 export default GoalPage
+
+const GoalPageHeader = styled.header`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`
+
+const GoalPageHeaderText = styled.h1`
+  font-size: 30px;
+  font-weight: normal;
+`

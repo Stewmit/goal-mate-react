@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react'
-import {Checkbox, Chip, Fab, ToggleButton, ToggleButtonGroup} from "@mui/material";
-import {Menu} from "../components/Menu";
-import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import AddIcon from '@mui/icons-material/Add';
-import {useDispatch, useSelector} from "react-redux";
+import {Checkbox, Chip, Fab, ToggleButton, ToggleButtonGroup} from "@mui/material"
+import {Menu} from "../components/Menu.jsx"
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"
+import CheckCircleIcon from "@mui/icons-material/CheckCircle"
+import AddIcon from '@mui/icons-material/Add'
+import {useDispatch, useSelector} from "react-redux"
 import styled from 'styled-components'
-import {createTask, fetchTasks, updateTask} from "../http/taskAPI";
-import TaskForm from "../components/forms/TaskForm";
-import Popup from "../components/modals/Popup";
-import {addLocalTask, editLocalTask, loadTasks} from "../store/reducers/taskSlice";
+import {createTask, fetchTasks, updateTask} from "../http/taskAPI.js"
+import TaskForm from "../components/forms/TaskForm.jsx"
+import Popup from "../components/modals/Popup.jsx"
+import {addLocalTask, editLocalTask, loadTasks} from "../store/reducers/taskSlice.js"
 
 const TaskPage = () => {
 

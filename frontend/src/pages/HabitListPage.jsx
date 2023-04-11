@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from 'react'
-import {Fab} from "@mui/material";
-import {Menu} from "../components/Menu";
-import AddIcon from '@mui/icons-material/Add';
-import {createHabit, fetchHabits} from "../http/habitAPI";
-import {addLocalHabit, loadHabits} from "../store/reducers/habitSlice";
-import {useDispatch, useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
-import {HABITS_ROUTE} from "../utils/consts";
-import Popup from "../components/modals/Popup";
-import HabitForm from "../components/forms/HabitForm";
+import {Fab} from "@mui/material"
+import {Menu} from "../components/Menu.jsx"
+import AddIcon from '@mui/icons-material/Add'
+import {createHabit, fetchHabits} from "../http/habitAPI.js"
+import {addLocalHabit, loadHabits} from "../store/reducers/habitSlice.js"
+import {useDispatch, useSelector} from "react-redux"
+import {useNavigate} from "react-router-dom"
+import {HABITS_ROUTE} from "../utils/consts.js"
+import Popup from "../components/modals/Popup.jsx"
+import HabitForm from "../components/forms/HabitForm.jsx"
 import styled from 'styled-components'
-import {addDays, format} from "date-fns";
+import {addDays, format} from "date-fns"
 
 const N = 7
 

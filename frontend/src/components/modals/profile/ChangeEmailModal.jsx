@@ -1,10 +1,9 @@
 import React from 'react'
-import {useState} from "react";
-import {useDispatch} from "react-redux";
-import {editUser} from "../../../http/userAPI";
-import {SET_USER_ACTION} from "../../../utils/consts";
-import {Button, Container, Modal, Stack, TextField, Typography} from "@mui/material";
-import {setUser} from "../../../store/reducers/userSlice";
+import {useState} from "react"
+import {useDispatch} from "react-redux"
+import {editUser} from "../../../http/userAPI.js"
+import {Button, Container, Modal, Stack, TextField, Typography} from "@mui/material"
+import {setUser} from "../../../store/reducers/userSlice.js"
 
 const ChangeEmailModal = (props) => {
     const [email, setEmail] = useState(props.user.email)

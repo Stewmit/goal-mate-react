@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import {deleteHabit, fetchOneHabit} from "../http/habitAPI";
-import {useNavigate, useParams} from "react-router-dom";
-import {Button} from "@mui/material";
-import {HABITS_ROUTE} from "../utils/consts";
+import React, {useEffect, useState} from 'react'
+import {deleteHabit, fetchOneHabit} from "../http/habitAPI.js"
+import {useNavigate, useParams} from "react-router-dom"
+import {Button} from "@mui/material"
+import {HABITS_ROUTE} from "../utils/consts.js"
 
 const HabitPage = () => {
 
@@ -51,7 +51,7 @@ const HabitPage = () => {
             </div>
             <Button variant='outlined' color='secondary' onClick={() => handleDelete(habit.id)}>Delete</Button>
         </div>
-    );
-};
+    )
+}
 
-export default HabitPage;
+export default HabitPage

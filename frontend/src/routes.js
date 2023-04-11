@@ -1,14 +1,14 @@
-import CalendarPage from './pages/CalendarPage'
-import ChatPage from './pages/main_pages/ChatPage'
-import FriendsPage from './pages/main_pages/FriendsPage'
-import GoalPage from './pages/main_pages/GoalPage'
-import HabitListPage from './pages/HabitListPage'
-import HabitPage from "./pages/HabitPage"
-import MyDay from './pages/main_pages/MyDay'
-import ProfilePage from './pages/ProfilePage'
-import TaskPage from './pages/TaskPage'
-import AuthPage from './pages/AuthPage'
-import StartPage from './pages/StartPage'
+import CalendarPage from './pages/CalendarPage.jsx'
+import ChatPage from './pages/temp/ChatPage.jsx'
+import FriendsPage from './pages/temp/FriendsPage.jsx'
+import GoalPage from './pages/temp/GoalPage.jsx'
+import HabitListPage from './pages/HabitListPage.jsx'
+import HabitPage from "./pages/HabitPage.jsx"
+import MyDay from './pages/temp/MyDay.jsx'
+import ProfilePage from './pages/ProfilePage.jsx'
+import TaskPage from './pages/TaskPage.jsx'
+import AuthPage from './pages/AuthPage.jsx'
+import StartPage from './pages/StartPage.jsx'
 import {CALENDAR_ROUTE, CHAT_ROUTE, DEFAULT_ROUTE, FRIENDS_ROUTE, GOALS_ROUTE, HABITS_ROUTE, LOGIN_ROUTE, MY_DAY_ROUTE, PROFILE_ROUTE, REGISTRATION_ROUTE, TASKS_ROUTE} from './utils/consts'
 
 export const authRoutes = [

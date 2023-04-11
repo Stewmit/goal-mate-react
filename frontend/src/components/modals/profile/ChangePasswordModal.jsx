@@ -1,10 +1,11 @@
 import React from 'react'
-import {useState} from "react";
-import {useDispatch} from "react-redux";
-import {changePassword} from "../../../http/userAPI";
-import {LOGIN_ROUTE, SET_IS_AUTH_ACTION, SET_USER_ACTION} from "../../../utils/consts";
-import {Button, Container, Modal, Stack, TextField, Typography} from "@mui/material";
-import {useNavigate} from "react-router-dom";
+import {useState} from "react"
+import {useDispatch} from "react-redux"
+import {changePassword} from "../../../http/userAPI.js"
+import {LOGIN_ROUTE} from "../../../utils/consts.js"
+import {Button, Container, Modal, Stack, TextField, Typography} from "@mui/material"
+import {useNavigate} from "react-router-dom"
+import {authorize, setUser} from "../../../store/reducers/userSlice.js";
 
 const ChangePasswordModal = (props) => {
 
@@ -18,8 +19,8 @@ const ChangePasswordModal = (props) => {
     const logout = () => {
         navigate(LOGIN_ROUTE)
         localStorage.setItem('token', '')
-        dispatch({type: SET_IS_AUTH_ACTION, payload: false})
-        dispatch({type: SET_USER_ACTION, payload: {}})
+        dispatch(authorize(false))
+        dispatch(setUser({}))
     }
 
     const changePasswordHandler = async () => {

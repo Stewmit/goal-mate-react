@@ -1,13 +1,13 @@
-import React from 'react';
+import React from 'react'
 import styled from 'styled-components'
-import {Button, IconButton, TextField} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import {useForm} from "../../hooks/useForm";
-import {useEffect} from "react";
-import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
-import {DatePicker} from "@mui/x-date-pickers/DatePicker";
-import {format} from "date-fns";
-import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import {Button, IconButton, TextField} from "@mui/material"
+import CloseIcon from "@mui/icons-material/Close"
+import {useForm} from "../../hooks/useForm.js"
+import {useEffect} from "react"
+import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns"
+import {DatePicker} from "@mui/x-date-pickers/DatePicker"
+import {format} from "date-fns"
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider"
 
 const initialValues = {
     id: 0,

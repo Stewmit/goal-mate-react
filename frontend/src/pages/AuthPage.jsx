@@ -1,11 +1,11 @@
 import React, {useState} from 'react'
-import {Box, Container, Paper, Stack, TextField, Typography} from "@mui/material";
-import {useLocation, NavLink, useNavigate} from "react-router-dom";
-import {CALENDAR_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE} from "../utils/consts";
-import {login, registration} from "../http/userAPI";
-import {useDispatch} from "react-redux";
+import {Box, Container, Paper, Stack, TextField, Typography} from "@mui/material"
+import {useLocation, NavLink, useNavigate} from "react-router-dom"
+import {useDispatch} from "react-redux"
 import styled from 'styled-components'
-import {authorize, setUser} from "../store/reducers/userSlice";
+import {CALENDAR_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE} from "../utils/consts.js"
+import {login, registration} from "../http/userAPI.js"
+import {authorize, setUser} from "../store/reducers/userSlice.js"
 
 const AuthPage = () => {
 

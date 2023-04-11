@@ -1,21 +1,21 @@
 import React, {useEffect, useState} from 'react'
-import {Checkbox, Divider, IconButton} from "@mui/material";
-import {Menu} from "../components/Menu";
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import {createTask, fetchTasks, updateTask} from "../http/taskAPI";
+import {Checkbox, Divider, IconButton} from "@mui/material"
+import {Menu} from "../components/Menu.jsx"
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
+import {createTask, fetchTasks, updateTask} from "../http/taskAPI.js"
 import {useDispatch, useSelector} from "react-redux"
-import {addLocalTask, editLocalTask, loadTasks} from '../store/reducers/taskSlice'
+import {addLocalTask, editLocalTask, loadTasks} from '../store/reducers/taskSlice.js'
 import {addDays, format, startOfWeek} from 'date-fns'
-import Popup from "../components/modals/Popup";
-import TaskForm from "../components/forms/TaskForm";
+import Popup from "../components/modals/Popup.jsx"
+import TaskForm from "../components/forms/TaskForm.jsx"
 import styled from 'styled-components'
-import {addLocalDay, deleteLocalDay, loadHabits} from "../store/reducers/habitSlice";
-import {addDay, deleteDay, fetchHabits} from "../http/habitAPI";
-import {useNavigate} from "react-router-dom";
-import {HABITS_ROUTE} from "../utils/consts";
+import {addLocalDay, deleteLocalDay, loadHabits} from "../store/reducers/habitSlice.js"
+import {addDay, deleteDay, fetchHabits} from "../http/habitAPI.js"
+import {useNavigate} from "react-router-dom"
+import {HABITS_ROUTE} from "../utils/consts.js"
 
 const weekDays = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС']
 

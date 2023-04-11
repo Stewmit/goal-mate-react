@@ -1,15 +1,15 @@
 import React from 'react'
-import {Menu} from "../../components/Menu";
+import {Menu} from "../../components/Menu.jsx";
 
-const FriendsPage = () => {
+const MyDay = () => {
     return (
         <div>
             <Menu/>
             <div>
-                FriendsPage
+                MyDay
             </div>
         </div>
     )
 }
 
-export default FriendsPage
+export default MyDay

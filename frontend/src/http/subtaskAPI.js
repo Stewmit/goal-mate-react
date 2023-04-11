@@ -1,4 +1,4 @@
-import {$authHost} from "./index"
+import {$authHost} from "./index.js"
 
 export const createSubtask = async (subtask) => {
     const {data} = await $authHost.post('api/task/subtask', subtask)

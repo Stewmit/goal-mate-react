@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import {Provider} from 'react-redux'
-import {store} from './store/index'
+import {store} from '../src/store/index'
 import {createGlobalStyle} from 'styled-components'
 
 const Global = createGlobalStyle`
@@ -14,9 +14,7 @@ const Global = createGlobalStyle`
   }
 `
 
-const root = ReactDOM.createRoot(document.getElementById('root'))
-
-root.render(
+ReactDOM.createRoot(document.getElementById('root')).render(
     <Provider store={store}>
         <>
             <Global/>

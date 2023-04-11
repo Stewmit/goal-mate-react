@@ -1,8 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import {Routes, Route, Navigate} from 'react-router-dom'
-import { authRoutes, publicRoutes } from '../routes'
-import { DEFAULT_ROUTE } from '../utils/consts'
+import { authRoutes, publicRoutes } from '../routes.js'
+import { DEFAULT_ROUTE } from '../utils/consts.js'
 
 const AppRouter = () => {
 

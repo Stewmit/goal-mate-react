@@ -1,15 +1,15 @@
 import React, {useState} from 'react'
-import {useSelector} from "react-redux";
-import {Menu} from "../components/Menu";
-import {Box, Container, Divider, Grid, IconButton, Link, List, ListItem, Paper, Stack, Typography} from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
-import ChangeNameModal from "../components/modals/profile/ChangeNameModal";
-import ChangeEmailModal from "../components/modals/profile/ChangeEmailModal";
-import ChangePasswordModal from "../components/modals/profile/ChangePasswordModal";
-import AccountDeleteDialog from "../components/alerts/AccountDeleteDialog";
-import {useEffect} from "react";
-import {fetchTasks} from "../http/taskAPI";
-import {fetchHabits} from "../http/habitAPI";
+import {useSelector} from "react-redux"
+import {Menu} from "../components/Menu.jsx"
+import {Box, Container, Divider, Grid, IconButton, Link, List, ListItem, Paper, Stack, Typography} from "@mui/material"
+import EditIcon from '@mui/icons-material/Edit'
+import ChangeNameModal from "../components/modals/profile/ChangeNameModal.jsx"
+import ChangeEmailModal from "../components/modals/profile/ChangeEmailModal.jsx"
+import ChangePasswordModal from "../components/modals/profile/ChangePasswordModal.jsx"
+import AccountDeleteDialog from "../components/alerts/AccountDeleteDialog.jsx"
+import {useEffect} from "react"
+import {fetchTasks} from "../http/taskAPI.js"
+import {fetchHabits} from "../http/habitAPI.js"
 
 const ProfilePage = () => {
 

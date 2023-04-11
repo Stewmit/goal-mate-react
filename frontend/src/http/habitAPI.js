@@ -1,4 +1,4 @@
-import {$authHost} from "./index"
+import {$authHost} from "./index.js"
 
 export const createHabit = async (habit) => {
     const {data} = await $authHost.post('api/habit', habit)

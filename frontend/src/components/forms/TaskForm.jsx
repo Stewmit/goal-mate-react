@@ -1,22 +1,22 @@
-import React, {useEffect, useState} from 'react';
-import {Badge, Button, Checkbox, IconButton, Stack, TextField } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import AddIcon from "@mui/icons-material/Add";
-import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
-import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
-import {DatePicker} from "@mui/x-date-pickers/DatePicker";
-import {BlockPicker} from "react-color";
-import PaletteIcon from '@mui/icons-material/Palette';
-import Tippy from "@tippyjs/react";
-import AlertDialog from "../alerts/AlertDialog";
-import {deleteTask} from "../../http/taskAPI";
-import {useDispatch} from "react-redux";
-import {useForm} from "../../hooks/useForm";
+import React, {useEffect, useState} from 'react'
+import {Badge, Button, Checkbox, IconButton, Stack, TextField } from "@mui/material"
+import DeleteIcon from "@mui/icons-material/Delete"
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"
+import CheckCircleIcon from "@mui/icons-material/CheckCircle"
+import AddIcon from "@mui/icons-material/Add"
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider"
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns'
+import {DatePicker} from "@mui/x-date-pickers/DatePicker"
+import {BlockPicker} from "react-color"
+import Tippy from "@tippyjs/react"
+import PaletteIcon from '@mui/icons-material/Palette'
+import AlertDialog from "../alerts/AlertDialog.jsx"
+import {deleteTask} from "../../http/taskAPI.js"
+import {useDispatch} from "react-redux"
+import {useForm} from "../../hooks/useForm.js"
 import {Reorder} from 'framer-motion'
-import CloseIcon from "@mui/icons-material/Close";
-import {deleteLocalTask} from "../../store/reducers/taskSlice";
+import CloseIcon from "@mui/icons-material/Close"
+import {deleteLocalTask} from "../../store/reducers/taskSlice.js"
 import {format} from "date-fns"
 import { v4 as uuid} from 'uuid'
 
@@ -179,7 +179,7 @@ const TaskForm = (props) => {
                     />
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
-                            label='Дата'
+                            label="Дата"
                             value={taskForm.inputs.date}
                             onChange={(date) => taskForm.handleChange('date', format(date, 'yyyy-MM-dd'))}
                             renderInput={(params) => <TextField {...params} />}

@@ -1,10 +1,8 @@
 import React, {useState} from 'react'
-import {Button, Container, Modal, Stack, TextField, Typography} from "@mui/material";
-import {editUser} from "../../../http/userAPI";
-import {useDispatch} from "react-redux";
-import {SET_USER_ACTION} from "../../../utils/consts";
-import {editLocalTask} from "../../../store/reducers/taskSlice";
-import {setUser} from "../../../store/reducers/userSlice";
+import {Button, Container, Modal, Stack, TextField, Typography} from "@mui/material"
+import {editUser} from "../../../http/userAPI.js"
+import {useDispatch} from "react-redux"
+import {setUser} from "../../../store/reducers/userSlice.js"
 
 const ChangeNameModal = (props) => {
 

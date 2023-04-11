@@ -7,28 +7,29 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined'
 import {useState} from "react"
-import {IconButton} from "@mui/material";
+import {IconButton} from "@mui/material"
 import {useNavigate} from "react-router-dom"
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import GroupIcon from '@mui/icons-material/Group';
-import TodayIcon from '@mui/icons-material/Today';
-import DateRangeIcon from '@mui/icons-material/DateRange';
-import FlagIcon from '@mui/icons-material/Flag';
-import LoopIcon from '@mui/icons-material/Loop';
-import CheckIcon from '@mui/icons-material/Check';
-import LogoutIcon from '@mui/icons-material/Logout';
+import AccountBoxIcon from '@mui/icons-material/AccountBox'
+import GroupIcon from '@mui/icons-material/Group'
+import TodayIcon from '@mui/icons-material/Today'
+import DateRangeIcon from '@mui/icons-material/DateRange'
+import FlagIcon from '@mui/icons-material/Flag'
+import LoopIcon from '@mui/icons-material/Loop'
+import CheckIcon from '@mui/icons-material/Check'
+import LogoutIcon from '@mui/icons-material/Logout'
 import {
     CALENDAR_ROUTE, DEFAULT_ROUTE,
     FRIENDS_ROUTE,
     GOALS_ROUTE,
     HABITS_ROUTE,
     MY_DAY_ROUTE,
-    PROFILE_ROUTE, SET_IS_AUTH_ACTION, SET_USER_ACTION,
+    PROFILE_ROUTE,
     TASKS_ROUTE
-} from "../utils/consts";
+} from "../utils/consts.js";
 import {useDispatch} from "react-redux";
+import {authorize, setUser} from "../store/reducers/userSlice.js";
 
 export const Menu = () => {
 
@@ -38,8 +39,8 @@ export const Menu = () => {
     const dispatch = useDispatch()
 
     const logout = () => {
-        dispatch({type: SET_IS_AUTH_ACTION, payload: false})
-        dispatch({type: SET_USER_ACTION, payload: {}})
+        dispatch(authorize(false))
+        dispatch(setUser({}))
         localStorage.setItem('token', '')
         navigate(DEFAULT_ROUTE)
     }

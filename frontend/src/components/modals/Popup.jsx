@@ -1,6 +1,5 @@
 import React from 'react'
-import {Box, Container, Modal} from "@mui/material";
-import './Popup.css'
+import {Box, Container, Modal} from "@mui/material"
 
 const Popup = (props) => {
 
