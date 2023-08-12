@@ -19,6 +19,10 @@ const Goal = sequelize.define('goal', {
     dueDate: {
         type: DataTypes.DATE
     },
+    isAchieved: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
     description: {
         type: DataTypes.TEXT
     }

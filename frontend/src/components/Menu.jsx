@@ -19,6 +19,7 @@ import FlagIcon from '@mui/icons-material/Flag'
 import LoopIcon from '@mui/icons-material/Loop'
 import CheckIcon from '@mui/icons-material/Check'
 import LogoutIcon from '@mui/icons-material/Logout'
+import PublicIcon from '@mui/icons-material/Public'
 import {
     CALENDAR_ROUTE, DEFAULT_ROUTE,
     FRIENDS_ROUTE,
@@ -26,7 +27,8 @@ import {
     HABITS_ROUTE,
     MY_DAY_ROUTE,
     PROFILE_ROUTE,
-    TASKS_ROUTE
+    TASKS_ROUTE,
+    FEED_ROUTE
 } from "../utils/consts.js";
 import {useDispatch} from "react-redux";
 import {authorize, setUser} from "../store/reducers/userSlice.js";
@@ -49,7 +51,7 @@ export const Menu = () => {
         <div>
             <React.Fragment>
                 <IconButton onClick={() => setOpen(true)}>
-                    <AccountCircleOutlinedIcon fontSize={'large'} style={{ color: 'black' }} />
+                    <AccountCircleOutlinedIcon fontSize='large' style={{ color: 'white' }} />
                 </IconButton>
                 <Drawer
                     anchor={'left'}
@@ -76,7 +78,15 @@ export const Menu = () => {
                                     <ListItemIcon>
                                         <GroupIcon />
                                     </ListItemIcon>
-                                    <ListItemText primary={'Друзья'} secondary={'Скоро'} />
+                                    <ListItemText primary={'Контакты'}  />
+                                </ListItemButton>
+                            </ListItem>
+                            <ListItem disablePadding>
+                                <ListItemButton onClick={() => navigate(FEED_ROUTE)}>
+                                    <ListItemIcon>
+                                        <PublicIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={'Фид'} />
                                 </ListItemButton>
                             </ListItem>
                         </List>
@@ -87,7 +97,7 @@ export const Menu = () => {
                                     <ListItemIcon>
                                         <TodayIcon />
                                     </ListItemIcon>
-                                    <ListItemText primary={'Мой день'} secondary={'Скоро'}/>
+                                    <ListItemText primary={'Мой день'}/>
                                 </ListItemButton>
                             </ListItem>
                             <ListItem disablePadding>
@@ -103,7 +113,7 @@ export const Menu = () => {
                                     <ListItemIcon>
                                         <FlagIcon />
                                     </ListItemIcon>
-                                    <ListItemText primary={'Цели'} secondary={'Скоро'} />
+                                    <ListItemText primary={'Цели'}  />
                                 </ListItemButton>
                             </ListItem>
                             <ListItem disablePadding>

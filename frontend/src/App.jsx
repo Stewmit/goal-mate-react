@@ -18,7 +18,8 @@ function App() {
                 id: data.id,
                 name: data.name,
                 surname: data.surname,
-                email: data.email
+                email: data.email,
+                avatar: data.avatar
             }))
         }).finally(() => setLoading(false))
     }, [])

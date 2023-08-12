@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Box, Container, Paper, Stack, TextField, Typography} from "@mui/material"
+import {Box, Container, Stack, TextField, Typography} from "@mui/material"
 import {useLocation, NavLink, useNavigate} from "react-router-dom"
 import {useDispatch} from "react-redux"
 import styled from 'styled-components'
@@ -34,7 +34,8 @@ const AuthPage = () => {
                 id: data.id,
                 name: data.name,
                 surname: data.surname,
-                email: data.email
+                email: data.email,
+                avatar: data.avatar
             }))
             navigate(CALENDAR_ROUTE)
         }
@@ -57,17 +58,7 @@ const AuthPage = () => {
 
     return (
         <Container>
-            <Paper elevation={4} sx={{
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                marginTop: '100px',
-                display: 'flex',
-                justifyContent: 'top',
-                alignItems: 'center',
-                flexDirection: 'column',
-                width: '60%',
-                height: 'auto',
-            }}>
+            <FormBox>
                 <Typography mt={3} fontSize={30} fontWeight={400}>
                     {isLoginPage ? 'Авторизация' : 'Регистрация'}
                 </Typography>
@@ -102,31 +93,61 @@ const AuthPage = () => {
                         variant="outlined"
                     />
                     <Stack>
-                        <Box mt={1} mb={1} fontWeight={500} sx={{cursor: 'pointer'}}>
+                        <Box mt={1} mb={1} fontWeight={500} sx={{cursor: 'pointer', display: 'flex', alignItems: 'left'}}>
                             {
                                 isLoginPage
                                 ?
-                                    <NavLink style={{ color: 'steelblue', textDecoration: 'none', fontFamily: 'Roboto, sans-serif' }} onClick={clearLoginFields} to={REGISTRATION_ROUTE}>Нет аккаунта</NavLink>
+                                    <NavLink style={{ color: '#8000ff', fontSize: '1.2em', textDecoration: 'none', fontFamily: 'Roboto, sans-serif' }} onClick={clearLoginFields} to={REGISTRATION_ROUTE}>Нет аккаунта</NavLink>
                                 :
-                                    <NavLink style={{ color: 'steelblue', textDecoration: 'none', fontFamily: 'Roboto, sans-serif' }} onClick={clearRegisterFields} to={LOGIN_ROUTE}>Есть аккаунт</NavLink>
+                                    <NavLink style={{ color: '#8000ff', fontSize: '1.2em', textDecoration: 'none', fontFamily: 'Roboto, sans-serif' }} onClick={clearRegisterFields} to={LOGIN_ROUTE}>Есть аккаунт</NavLink>
                             }
                         </Box>
                         <SubmitButton onClick={signIn}>{isLoginPage ? 'Войти' : 'Зарегистрироваться'}</SubmitButton>
                     </Stack>
                 </Stack>
-            </Paper>
+            </FormBox>
         </Container>
     )
 }
 
 export default AuthPage
 
+const FormBox = styled.div`
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 100px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+  width: 50%;
+  background-color: white;
+  height: auto;
+  border: none;
+  box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+`
+
 const SubmitButton = styled.button`
+  padding: 15px 45px;
+  font-size: 1.2em;
   height: 50px;
-  color: black;
-  background-color: lightsteelblue;
-  font-size: 18px;
   border: none;
   border-radius: 10px;
   cursor: pointer;
+  font-weight: 500;
+  background-image: linear-gradient(to right, #fc00ff 0%, #00dbde  51%, #fc00ff  100%);
+  text-transform: uppercase;
+  text-align: center;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  display: block;
+
+  &:hover {
+    background-position: right center;
+    color: #fff;
+    text-decoration: none;
+  }
 `

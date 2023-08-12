@@ -69,7 +69,7 @@ class TaskController {
                 model: Subtask,
             }],
             order: [
-                [sortingType ? sortingType : 'date', 'ASC'],
+                [sortingType ? sortingType : 'name', 'ASC'],
                 [Subtask, 'order', 'ASC']
             ]
         })

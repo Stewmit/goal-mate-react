@@ -16,6 +16,10 @@ import {addLocalDay, deleteLocalDay, loadHabits} from "../store/reducers/habitSl
 import {addDay, deleteDay, fetchHabits} from "../http/habitAPI.js"
 import {useNavigate} from "react-router-dom"
 import {HABITS_ROUTE} from "../utils/consts.js"
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank.js";
+import CheckBoxIcon from "@mui/icons-material/CheckBox.js";
+import NotificationsIcon from "@mui/icons-material/Notifications.js";
+import PersonIcon from "@mui/icons-material/Person.js";
 
 const weekDays = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС']
 
@@ -134,6 +138,26 @@ const CalendarPage = () => {
         }
     }
 
+    function dragStartHandler(e) {
+
+    }
+
+    function dragLeaveHandler(e) {
+        
+    }
+
+    function dragEndHandler(e) {
+        
+    }
+
+    function dragOverHandler(e) {
+        e.preventDefault()
+    }
+
+    function dropHandler(e) {
+        e.preventDefault()
+    }
+
     return (
         <div>
             <CalendarHeader>
@@ -165,15 +189,22 @@ const CalendarPage = () => {
                                     habit.regularity[dayIndex] === '1'
                                         ?
                                         <DayBoardHabit>
-                                            <DayBoardHabitCheckbox
-                                                type="checkbox"
+                                            <Checkbox
+                                                color="default"
                                                 checked={habit.habitDays.filter(day => day.date === formatDate(dayIndex, 'yyyy-MM-dd')).length > 0}
+                                                icon={<CheckBoxOutlineBlankIcon fontSize='small'/>}
+                                                checkedIcon={<CheckBoxIcon fontSize='small'/>}
                                                 onChange={(e) => createOrDeleteHabitDay(habit, e.target.checked, dayIndex)}
                                             />
                                             <DayBoardHabitName onClick={() => navigate(HABITS_ROUTE + '/' + habit.id)}>{habit.name}</DayBoardHabitName>
                                         </DayBoardHabit>
                                         :
                                         <DayBoardHabitIgnored onClick={() => navigate(HABITS_ROUTE + '/' + habit.id)}>
+                                            <Checkbox
+                                                disabled={true}
+                                                color="default"
+                                                icon={<CheckBoxOutlineBlankIcon fontSize='small'/>}
+                                            />
                                             <DayBoardHabitName>{habit.name}</DayBoardHabitName>
                                         </DayBoardHabitIgnored>
                                 }
@@ -190,33 +221,89 @@ const CalendarPage = () => {
                             {tasks.map((task) =>
                                 formatDate(dayIndex, 'yyyy-MM-dd') === task.date
                                     ?
-                                    <DayBoardTask
-                                        key={task.id}
-                                        highlight={task.highlightColor}
-                                    >
-                                        <DayBoardTaskContent>
-                                            <DayBoardTaskTime>{task.time}</DayBoardTaskTime>
-                                            <DayBoardTaskName onClick={() => openTask(task)}>{task.name}</DayBoardTaskName>
-                                        </DayBoardTaskContent>
-                                        <DayBoardTaskStatusGroup>
-                                            {
-                                                task.subtasks.length
-                                                    ?
-                                                    <DayBoardSubtaskCounter>
-                                                        {`${task.subtasks.reduce((accumulator, subtask) => accumulator + subtask.isComplete, 0)}/${task.subtasks.length}`}
-                                                    </DayBoardSubtaskCounter>
-                                                    :
-                                                    <></>
-                                            }
-                                            <Checkbox
-                                                checked={task.isComplete}
-                                                onChange={() => checkboxHandler(task)}
-                                                color="default"
-                                                icon={<RadioButtonUncheckedIcon/>}
-                                                checkedIcon={<CheckCircleIcon/>}
-                                            />
-                                        </DayBoardTaskStatusGroup>
-                                    </DayBoardTask>
+                                    (
+                                        (task.id === 324 || task.id === 336)
+                                            ?
+                                            <DayBoardTaskBorder
+                                                key={task.id}
+                                                highlight={task.highlightColor}
+                                            >
+                                                <DayBoardTaskContent>
+                                                    <DayBoardTaskTime>{task.time}</DayBoardTaskTime>
+                                                    <DayBoardTaskName onClick={() => openTask(task)}>{task.name}</DayBoardTaskName>
+                                                </DayBoardTaskContent>
+                                                <DayBoardTaskStatusGroup>
+                                                    <DayBoardTaskIndicators>
+                                                        {
+                                                            task.subtasks.length
+                                                                ?
+                                                                <DayBoardSubtaskCounter>
+                                                                    {`${task.subtasks.reduce((accumulator, subtask) => accumulator + subtask.isComplete, 0)}/${task.subtasks.length}`}
+                                                                </DayBoardSubtaskCounter>
+                                                                :
+                                                                <></>
+                                                        }
+                                                    </DayBoardTaskIndicators>
+                                                    <Checkbox
+                                                        checked={task.isComplete}
+                                                        onChange={() => checkboxHandler(task)}
+                                                        color="default"
+                                                        icon={<RadioButtonUncheckedIcon fontSize='small'/>}
+                                                        checkedIcon={<CheckCircleIcon fontSize='small'/>}
+                                                    />
+                                                </DayBoardTaskStatusGroup>
+                                            </DayBoardTaskBorder>
+                                            :
+                                            <DayBoardTask
+                                                draggable={true}
+                                                onDragStart={e => dragStartHandler(e)}
+                                                onDragLeave={e => dragLeaveHandler(e)}
+                                                onDragEnd={e => dragEndHandler(e)}
+                                                onDragOver={e => dragOverHandler(e)}
+                                                onDrop={e => dropHandler(e)}
+                                                key={task.id}
+                                                highlight={task.highlightColor}
+                                            >
+                                                <DayBoardTaskContent>
+                                                    <DayBoardTaskTime>{task.time}</DayBoardTaskTime>
+                                                    <DayBoardTaskName onClick={() => openTask(task)}>{task.name}</DayBoardTaskName>
+                                                </DayBoardTaskContent>
+                                                <DayBoardTaskStatusGroup>
+                                                    <DayBoardTaskIndicators>
+                                                        {
+                                                            task.subtasks.length
+                                                                ?
+                                                                <DayBoardSubtaskCounter>
+                                                                    {`${task.subtasks.reduce((accumulator, subtask) => accumulator + subtask.isComplete, 0)}/${task.subtasks.length}`}
+                                                                </DayBoardSubtaskCounter>
+                                                                :
+                                                                <></>
+                                                        }
+                                                        {
+                                                            task.name === 'Составить отчёт' || task.name === 'Купить канцтовары' || task.name === 'Покормить кота' || task.name === 'Оформить заказ' || task.name === 'Приготовить ужин'
+                                                            ?
+                                                                <PersonIcon fontSize='20'/>
+                                                                :
+                                                                <div></div>
+                                                        }
+                                                        {/*{*/}
+                                                        {/*    task.name === 'Переписать конспект' || task.name === 'Просмотр вакансий' || task.name === "Полить помидоры"*/}
+                                                        {/*        ?*/}
+                                                        {/*        <NotificationsIcon fontSize='20px'/>*/}
+                                                        {/*        :*/}
+                                                        {/*        <div></div>*/}
+                                                        {/*}*/}
+                                                    </DayBoardTaskIndicators>
+                                                    <Checkbox
+                                                        checked={task.isComplete}
+                                                        onChange={() => checkboxHandler(task)}
+                                                        color="default"
+                                                        icon={<RadioButtonUncheckedIcon fontSize='small'/>}
+                                                        checkedIcon={<CheckCircleIcon fontSize='small'/>}
+                                                    />
+                                                </DayBoardTaskStatusGroup>
+                                            </DayBoardTask>
+                                    )
                                     :
                                     <div key={task.id}></div>
                             )}
@@ -244,7 +331,8 @@ const CalendarHeader = styled.header`
   align-items: center;
   width: 100%;
   gap: 10px;
-  background: white;
+  background: linear-gradient(90deg, rgb(0, 207, 241) 22%, rgba(213, 29, 253, 1) 78%);
+  margin-bottom: 10px;
   
   @media (max-width: ${switchState}) {
     position: fixed;
@@ -275,6 +363,8 @@ const CalendarDays = styled.div`
   display: flex;
   justify-content: space-evenly;
   flex-direction: row;
+  margin-left: 10px;
+  margin-right: 10px;
   
   @media (max-width: ${switchState}) {
     flex-direction: column;
@@ -330,13 +420,16 @@ const DayBoardTaskList = styled.div`
 const AddTaskField = styled.input`
   border: none;
   outline: none;
-  padding: 5px;
+  padding: 10px;
   font-size: 15px;
   border-bottom: #ddd solid 1px;
   margin-bottom: 10px;
+  box-shadow: 1px 2px 6px #aaa;
+  border-radius: 15px;
 `
 
 const DayBoardTask = styled.div`
+  font-size: 15px;
   margin-top: 5px;
   margin-bottom: 10px;
   width: 100%;
@@ -346,6 +439,7 @@ const DayBoardTask = styled.div`
   align-items: center;
   border-radius: 15px;
   box-shadow: 1px 2px 6px #aaa;
+  cursor: grabbing;
   background-color: ${props => (props.highlight) ? props.highlight : 'white'};
 `
 
@@ -361,21 +455,28 @@ const DayBoardTaskTime = styled.div`
 `
 
 const DayBoardTaskName = styled.div`
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  font-size: 15px;
+  //white-space: nowrap;
+  //text-overflow: ellipsis;
   overflow: hidden;
-  width: 130px;
+  //width: 110px;
   cursor: pointer;
 `
 
 const DayBoardSubtaskCounter = styled.div`
-  font-size: 13px;
+  font-size: 12px;
+  margin-left: 3px;
 `
 
 const DayBoardTaskStatusGroup = styled.div`
   display: flex;
   align-items: center;
-  gap: 5px;
+`
+
+const DayBoardTaskIndicators = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 3px;
 `
 
 const DayBoardHabit = styled.div`
@@ -386,13 +487,27 @@ const DayBoardHabit = styled.div`
 `
 
 const DayBoardHabitIgnored = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
   opacity: 0.3;
-`
-
-const DayBoardHabitCheckbox = styled.input`
-  cursor: pointer;
 `
 
 const DayBoardHabitName = styled.div`
   font-size: 18px;
+`
+
+const DayBoardTaskBorder = styled.div`
+  font-size: 15px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 15px;
+  box-shadow: 1px 2px 6px #aaa;
+  border: solid #ff30b7 2px;
+  background-color: ${props => (props.highlight) ? props.highlight : 'white'};
 `

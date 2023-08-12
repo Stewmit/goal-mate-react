@@ -2,14 +2,19 @@ const ApiError = require('../error/ApiError')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const User = require('../models/user.model')
+const FriendRequest = require('../models')
+const uuid = require('uuid')
+const path = require('path')
+const {Op} = require('sequelize')
 
-const generateJWT = (id, name, surname, email) => {
+const generateJWT = (id, name, surname, email, avatar) => {
     return jwt.sign(
         {
             id,
             name,
             surname,
-            email
+            email,
+            avatar
         }, 
         process.env.SECRET_KEY,
         {
@@ -19,6 +24,26 @@ const generateJWT = (id, name, surname, email) => {
 }
 
 class UserController {
+
+    async getAll(req, res) {
+
+        const {searchValue} = req.query
+
+        if (searchValue) {
+            const users = await User.findAll({
+                where: {
+                    email: {
+                        [Op.like]: '%' + searchValue + '%'
+                    }
+                }
+            })
+
+            return res.json(users)
+        }
+
+        return res.json([])
+    }
+
     async registration(req, res, next) {
         
         const {name, surname, email, password} = req.body
@@ -53,12 +78,12 @@ class UserController {
             return next(ApiError.internal('Wrong password!'))
         }
 
-        const token = generateJWT(user.id, user.name, user.surname, user.email)
+        const token = generateJWT(user.id, user.name, user.surname, user.email, user.avatar)
         return res.json({token})
     }
 
     async check(req, res, next) {
-        const token = generateJWT(req.user.id, req.user.name, req.user.surname, req.user.email)
+        const token = generateJWT(req.user.id, req.user.name, req.user.surname, req.user.email, req.user.avatar)
         return res.json({token})
     }
 
@@ -80,7 +105,7 @@ class UserController {
 
         const user = await User.findOne({where: {id}})
 
-        const token = generateJWT(user.id, user.name, user.surname, user.email)
+        const token = generateJWT(user.id, user.name, user.surname, user.email, req.user.avatar)
         return res.json({token})
     }
 
@@ -108,6 +133,32 @@ class UserController {
         )
 
         return res.json({message: 'Password was changed!'})
+    }
+
+    async changeAvatar(req, res, next) {
+
+        const {img} = req.files
+
+        if (!img) {
+            return next(ApiError.internal('No file chosen!'))
+        }
+
+        let fileName = uuid.v4() + ".jpg"
+        img.mv(path.resolve(__dirname, '..', 'static', 'users', fileName))
+
+        await User.update(
+            {
+                avatar: fileName
+            },
+            {
+                where: {
+                    id: req.user.id
+                },
+            }
+        )
+
+        const token = generateJWT(req.user.id, req.user.name, req.user.surname, req.user.email, fileName)
+        return res.json({token})
     }
 
     async deleteUser(req, res) {

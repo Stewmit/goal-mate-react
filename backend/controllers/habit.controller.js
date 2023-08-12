@@ -10,10 +10,10 @@ class HabitController {
         const habit = await Habit.create({
             name,
             regularity,
-            endDate,
-            target,
-            unit,
-            description,
+            // endDate,
+            // target,
+            // unit,
+            // description,
             userId: req.user.id
         })
 

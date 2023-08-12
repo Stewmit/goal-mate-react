@@ -55,10 +55,6 @@ const StartPage = () => {
                             <ShareIcon/>
                             <div>Делись результатами</div>
                         </Benefit>
-                        <Benefit>
-                            <ChatIcon/>
-                            <div>Общайся</div>
-                        </Benefit>
                     </BenefitList>
                     <StartButton onClick={() => navigate(REGISTRATION_ROUTE)}>Начать</StartButton>
                 </BodyBenefitGroup>
@@ -129,6 +125,7 @@ const Benefit = styled.li`
   margin-top: 12px;
   display: flex;
   gap: 10px;
+  align-items: center;
   font-weight: 500;
 `
 

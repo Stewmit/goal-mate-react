@@ -1,24 +1,33 @@
 import CalendarPage from './pages/CalendarPage.jsx'
-import ChatPage from './pages/temp/ChatPage.jsx'
-import FriendsPage from './pages/temp/FriendsPage.jsx'
-import GoalPage from './pages/temp/GoalPage.jsx'
+import FriendsPage from './pages/FriendsPage.jsx'
+import GoalPage from './pages/GoalPage.jsx'
 import HabitListPage from './pages/HabitListPage.jsx'
 import HabitPage from "./pages/HabitPage.jsx"
-import MyDay from './pages/temp/MyDay.jsx'
+import MyDay from './pages/MyDay.jsx'
 import ProfilePage from './pages/ProfilePage.jsx'
 import TaskPage from './pages/TaskPage.jsx'
 import AuthPage from './pages/AuthPage.jsx'
 import StartPage from './pages/StartPage.jsx'
-import {CALENDAR_ROUTE, CHAT_ROUTE, DEFAULT_ROUTE, FRIENDS_ROUTE, GOALS_ROUTE, HABITS_ROUTE, LOGIN_ROUTE, MY_DAY_ROUTE, PROFILE_ROUTE, REGISTRATION_ROUTE, TASKS_ROUTE} from './utils/consts'
+import {
+    CALENDAR_ROUTE,
+    CHAT_ROUTE,
+    DEFAULT_ROUTE,
+    FEED_ROUTE,
+    FRIENDS_ROUTE,
+    GOALS_ROUTE,
+    HABITS_ROUTE,
+    LOGIN_ROUTE,
+    MY_DAY_ROUTE,
+    PROFILE_ROUTE,
+    REGISTRATION_ROUTE,
+    TASKS_ROUTE
+} from './utils/consts'
+import FeedPage from "./pages/FeedPage.jsx";
 
 export const authRoutes = [
     {
         path: CALENDAR_ROUTE,
         Component: CalendarPage
-    },
-    {
-        path: CHAT_ROUTE,
-        Component: ChatPage
     },
     {
         path: FRIENDS_ROUTE,
@@ -47,6 +56,10 @@ export const authRoutes = [
     {
         path: TASKS_ROUTE,
         Component: TaskPage
+    },
+    {
+        path: FEED_ROUTE,
+        Component: FeedPage
     }
 ]
 

@@ -1,5 +1,16 @@
 import React, {useEffect, useState} from 'react'
-import {Badge, Button, Checkbox, IconButton, Stack, TextField } from "@mui/material"
+import {
+    Badge,
+    Button,
+    Checkbox,
+    FormControl,
+    IconButton,
+    InputLabel,
+    MenuItem,
+    Select,
+    Stack,
+    TextField
+} from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
@@ -19,6 +30,10 @@ import CloseIcon from "@mui/icons-material/Close"
 import {deleteLocalTask} from "../../store/reducers/taskSlice.js"
 import {format} from "date-fns"
 import { v4 as uuid} from 'uuid'
+import styled from "styled-components";
+import * as PropTypes from "prop-types";
+import {DateTimePicker} from "@mui/x-date-pickers";
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 const initialValues = {
     id: 0,
@@ -30,8 +45,16 @@ const initialValues = {
     isComplete: false
 }
 
-const defaultColors = ['#FFA591', '#FFF000', '#9DFF91', '#91FFFA', '#91B9FF']
+const defaultColors = ['#ffceb5', '#f5ffb5', '#b8ffb5', '#b5fffa', '#f1b5ff']
 
+function DemoContainer(props) {
+    return null;
+}
+
+DemoContainer.propTypes = {
+    components: PropTypes.arrayOf(PropTypes.string),
+    children: PropTypes.node
+};
 const TaskForm = (props) => {
 
     const {currentTask, saveTask, closeTask} = props
@@ -40,6 +63,9 @@ const TaskForm = (props) => {
     const [openAlert, setOpenAlert] = useState(false)
     const [newSubtaskInput, setNewSubtaskInput] = useState('')
     const [subtasks, setSubtasks] = useState([])
+    const [performer, setPerformer] = useState('')
+    const [goal, setGoal] = useState('')
+    const [dateTime, setDateTime] = useState('')
 
     const taskForm = useForm(initialValues)
 
@@ -114,7 +140,7 @@ const TaskForm = (props) => {
     }
 
     return (
-        <div>
+        <div style={{paddingBottom: '10px', paddingLeft: '10px', paddingRight: '10px'}}>
             <div style={{display: "flex", justifyContent: "right", width: '100%'}}>
                 <IconButton onClick={handleExit}>
                     <CloseIcon/>
@@ -173,7 +199,7 @@ const TaskForm = (props) => {
                         </div>
                     </div>
                     <TextField
-                        label='Время'
+                        label='Надпись'
                         value={taskForm.inputs.time}
                         onChange={(e) => taskForm.handleChange('time', e.target.value)}
                     />
@@ -185,6 +211,30 @@ const TaskForm = (props) => {
                             renderInput={(params) => <TextField {...params} />}
                         />
                     </LocalizationProvider>
+                    {/* <FormControl fullWidth>
+                        <InputLabel>Исполнитель</InputLabel>
+                        <Select
+                            value={performer}
+                            label="Исполнитель"
+                            onChange={(e) => setPerformer(e.target.value)}
+                        >
+                            <MenuItem value={'10'}>Павел Белоусов</MenuItem>
+                            <MenuItem value={'20'}>Twenty</MenuItem>
+                            <MenuItem value={'30'}>Thirty</MenuItem>
+                        </Select>
+                    </FormControl> */}
+                    <FormControl fullWidth>
+                        <InputLabel>Цель</InputLabel>
+                        <Select
+                            value={performer}
+                            label="Цель"
+                            onChange={(e) => setPerformer(e.target.value)}
+                        >
+                            <MenuItem value={'10'}>Завести видеоблог</MenuItem>
+                            <MenuItem value={'20'}>Twenty</MenuItem>
+                            <MenuItem value={'30'}>Thirty</MenuItem>
+                        </Select>
+                    </FormControl>
                     <TextField
                         label='Описание'
                         value={taskForm.inputs.description}
@@ -192,13 +242,13 @@ const TaskForm = (props) => {
                         multiline={true}
                         rows={5}
                     />
-                    <Button variant='outlined' onClick={handleSubmit}>Ok</Button>
+                    <SubmitButton variant='outlined' onClick={handleSubmit}>Ok</SubmitButton>
                 </Stack>
                 <Stack
                     sx={{
-                        width: '300px',
+                        width: '380px',
                         marginLeft: '50px',
-                        maxHeight: '450px',
+                        maxHeight: '600px',
                         overflow: 'auto'
                     }}
                     mt={1}
@@ -242,7 +292,7 @@ const TaskForm = (props) => {
                             }
                         </Reorder.Group>
                     }
-                    <div className='add-task'>
+                    <div style={{display: 'flex', alignItems: 'center', marginLeft: '10px', width: '360px'}}>
                         <TextField
                             placeholder='Подзадача'
                             variant="standard"
@@ -268,3 +318,37 @@ const TaskForm = (props) => {
 };
 
 export default TaskForm;
+
+const SubmitButton = styled.button`
+  margin-top: 10px;
+  padding: 15px 45px;
+  font-size: 1em;
+  height: 50px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  background-image: linear-gradient(to right, #fc00ff 0%, #00dbde  51%, #fc00ff  100%);
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  display: block;
+  margin-bottom: 10px;
+
+  &:hover {
+    background-position: right center;
+    color: #fff;
+    text-decoration: none;
+  }
+`
+
+const NotificationLine = styled.button`
+  background-color: white;
+  border: none;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 10px;
+`

@@ -6,6 +6,7 @@ import {LOGIN_ROUTE} from "../../../utils/consts.js"
 import {Button, Container, Modal, Stack, TextField, Typography} from "@mui/material"
 import {useNavigate} from "react-router-dom"
 import {authorize, setUser} from "../../../store/reducers/userSlice.js";
+import styled from "styled-components";
 
 const ChangePasswordModal = (props) => {
 
@@ -66,7 +67,7 @@ const ChangePasswordModal = (props) => {
                 <Typography component={'h1'} variant={'h4'} sx={{marginBottom: '30px'}}>
                     Сменить пароль
                 </Typography>
-                <Stack spacing={4}>
+                <Stack sx={{width: '60%'}} spacing={4} >
                     <TextField
                         type={'password'}
                         value={oldPassword}
@@ -91,7 +92,7 @@ const ChangePasswordModal = (props) => {
                         label="Повтор пароля"
                         variant="outlined"
                     />
-                    <Button onClick={changePasswordHandler} sx={{height: '45px'}} variant={'contained'}>Подтвердить</Button>
+                    <SubmitButton onClick={changePasswordHandler} sx={{height: '45px'}} variant={'contained'}>Подтвердить</SubmitButton>
                 </Stack>
             </Container>
         </Modal>
@@ -99,3 +100,29 @@ const ChangePasswordModal = (props) => {
 }
 
 export default ChangePasswordModal
+
+const SubmitButton = styled.button`
+  margin-top: 10px;
+  padding: 15px 45px;
+  font-size: 1em;
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  background-image: linear-gradient(to right, #fc00ff 0%, #00dbde  51%, #fc00ff  100%);
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  display: block;
+  margin-bottom: 10px;
+
+  &:hover {
+    background-position: right center;
+    color: #fff;
+    text-decoration: none;
+  }
+`
